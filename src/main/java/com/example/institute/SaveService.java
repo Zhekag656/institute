@@ -17,12 +17,17 @@ public class SaveService {
     }
 
     public static List<Student> showStudents() throws IOException{
+        try{
         ObjectMapper mapper = new ObjectMapper();
         File file = new File(STUDENT_JSON_FILE);
         if (!file.exists()){
             return new ArrayList<>();
         }
         return mapper.readValue(file, new TypeReference<List<Student>>() {});
+    } catch (IOException e){
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
     }
 
     public static void saveTeachers(List<Teacher> teachers) throws IOException{

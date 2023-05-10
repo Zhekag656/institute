@@ -18,7 +18,7 @@ public class HelloApplication extends Application {
     public ArrayList<Student> students = new ArrayList<>();
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws IOException {
 
         primaryStage.setTitle("Інститут");
         GridPane gridPane = new GridPane();
@@ -224,6 +224,7 @@ public class HelloApplication extends Application {
 
         Tab viewStudentsTab = new Tab("Всі учні");
 
+
         TableView<Student> studentsTable = new TableView<>();
         studentsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
@@ -287,7 +288,7 @@ public class HelloApplication extends Application {
 
         students.add(newStudent);
 
-        SaveService.saveStudents(students);
+        JsonUtil.saveStudentsToJson(students);
     }
 
 

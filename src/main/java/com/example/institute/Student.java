@@ -1,8 +1,10 @@
 package com.example.institute;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.SerializedName;
 
 public class Student extends Person{
+    @SerializedName("birthday")
     private String dateOfBirth;
     private int yearOfAdmission;
     private int yearOfGraduation;
