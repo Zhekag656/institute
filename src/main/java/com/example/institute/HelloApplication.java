@@ -68,10 +68,9 @@ public class HelloApplication extends Application {
         deleteButton.setOnAction(e -> deletePerson());
         GridPane.setConstraints(deleteButton, 2, 3);
 
-        Label roleLabel = new Label("Role");
-        GridPane.setConstraints(roleLabel, 0, 7);
-        positionBox.setItems(FXCollections.observableArrayList("Student", "Teacher"));
-        GridPane.setConstraints(positionBox, 1, 7, 3, 1);
+        Label rankLabel = new Label("Ранг");
+        GridPane.setConstraints(rankLabel, 0, 6);
+        GridPane.setConstraints(rankField, 1, 6, 3, 1);
 
         Label lastNameLabel = new Label("Last name");
         GridPane.setConstraints(lastNameLabel, 0, 4);
@@ -89,10 +88,6 @@ public class HelloApplication extends Application {
         GridPane.setConstraints(positionLabel, 0, 7);
         positionBox.setItems(FXCollections.observableArrayList("Professor", "Associate Professor", "Assistant Professor", "Lecturer"));
         GridPane.setConstraints(positionBox, 1, 7, 3, 1);
-
-        Label rankLabel = new Label("Rank");
-        GridPane.setConstraints(rankLabel, 0, 8);
-        GridPane.setConstraints(rankField, 1, 8, 3, 1);
 
         Label birthdateLabel = new Label("Birthdate (dd.MM.yyyy)");
         GridPane.setConstraints(birthdateLabel, 0, 9);
