@@ -41,13 +41,13 @@ public class HelloApplication extends Application {
     public void start(Stage primaryStage) {
 
 
-        primaryStage.setTitle("Anket App");
+        primaryStage.setTitle("Institute App");
         GridPane gridPane = new GridPane();
         gridPane.setPadding(new Insets(10, 10, 10, 10));
         gridPane.setHgap(10);
         gridPane.setVgap(10);
 
-        Label titleLabel = new Label("Anket App");
+        Label titleLabel = new Label("Institute App");
         titleLabel.setStyle("-fx-font-size: 24pt; -fx-font-weight: bold;");
         GridPane.setConstraints(titleLabel, 0, 0, 4, 1);
 
@@ -57,131 +57,72 @@ public class HelloApplication extends Application {
         GridPane.setConstraints(listView, 0, 2, 4, 1);
 
         Button addButton = new Button("Add");
-        addButton.setOnAction(e -> addPerson());
+        //addButton.setOnAction(e -> addPerson());
         GridPane.setConstraints(addButton, 0, 3);
 
         Button editButton = new Button("Edit");
-        editButton.setOnAction(e -> editPerson());
+        //editButton.setOnAction(e -> editPerson());
         GridPane.setConstraints(editButton, 1, 3);
 
         Button deleteButton = new Button("Delete");
-        deleteButton.setOnAction(e -> deletePerson());
+        //deleteButton.setOnAction(e -> deletePerson());
         GridPane.setConstraints(deleteButton, 2, 3);
 
-        Label rankLabel = new Label("Ранг");
-        GridPane.setConstraints(rankLabel, 0, 6);
-        GridPane.setConstraints(rankField, 1, 6, 3, 1);
+        TabPane tabPane = new TabPane();
+        tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+        tabPane.prefWidthProperty().bind(primaryStage.widthProperty());
 
-        Label lastNameLabel = new Label("Last name");
-        GridPane.setConstraints(lastNameLabel, 0, 4);
-        GridPane.setConstraints(lastNameField, 1, 4, 3, 1);
+        Tab teacherTab = new Tab("Add Teacher");
+        teacherTab.setClosable(false);
+        GridPane teacherPane = new GridPane();
+        teacherPane.setPadding(new Insets(10, 10, 10, 10));
+        teacherPane.setHgap(10);
+        teacherPane.setVgap(10);
 
-        Label firstNameLabel = new Label("First name");
-        GridPane.setConstraints(firstNameLabel, 0, 5);
-        GridPane.setConstraints(firstNameField, 1, 5, 3, 1);
+        Label lastNameLabel1 = new Label("Last name");
+        GridPane.setConstraints(lastNameLabel1, 0, 0);
+        TextField lastNameField1 = new TextField();
+        GridPane.setConstraints(lastNameField1, 1, 0);
 
-        Label middleNameLabel = new Label("Middle name");
-        GridPane.setConstraints(middleNameLabel, 0, 6);
-        GridPane.setConstraints(middleNameField, 1, 6, 3, 1);
+        Label firstNameLabel1 = new Label("First name");
+        GridPane.setConstraints(firstNameLabel1, 0, 1);
+        TextField firstNameField1 = new TextField();
+        GridPane.setConstraints(firstNameField1, 1, 1);
 
-        Label positionLabel = new Label("Position");
-        GridPane.setConstraints(positionLabel, 0, 7);
-        positionBox.setItems(FXCollections.observableArrayList("Professor", "Associate Professor", "Assistant Professor", "Lecturer"));
-        GridPane.setConstraints(positionBox, 1, 7, 3, 1);
+        Label middleNameLabel1 = new Label("Middle name");
+        GridPane.setConstraints(middleNameLabel1, 0, 2);
+        TextField middleNameField1 = new TextField();
+        GridPane.setConstraints(middleNameField1, 1, 2);
 
-        Label birthdateLabel = new Label("Birthdate (dd.MM.yyyy)");
-        GridPane.setConstraints(birthdateLabel, 0, 9);
-        GridPane.setConstraints(birthdateField, 1, 9, 3, 1);
+        Label birthdayLabel1 = new Label("Birthday (yyyy-mm-dd)");
+        GridPane.setConstraints(birthdayLabel1, 0, 3);
+        TextField birthdayField1 = new TextField();
+        GridPane.setConstraints(birthdayField1, 1, 3);
 
-        Label admissionYearLabel = new Label("Admission year");
-        GridPane.setConstraints(admissionYearLabel, 0, 10);
-        GridPane.setConstraints(admissionYearField, 1, 10, 3, 1);
+        Label departmentLabel = new Label("Department");
+        GridPane.setConstraints(departmentLabel, 0, 4);
+        ChoiceBox<String> departmentChoiceBox = new ChoiceBox<>();
+        departmentChoiceBox.getItems().addAll("Math", "Physics", "Chemistry", "Biology", "History", "Geography");
+        GridPane.setConstraints(departmentChoiceBox, 1, 4);
 
-        Label graduationYearLabel = new Label("Graduation year");
-        GridPane.setConstraints(graduationYearLabel, 0, 11);
-        GridPane.setConstraints(graduationYearField, 1, 11, 3, 1);
+        Label salaryLabel = new Label("Salary");
+        GridPane.setConstraints(salaryLabel, 0, 5);
+        TextField salaryField = new TextField();
+        GridPane.setConstraints(salaryField, 1, 5);
 
-        gridPane.getChildren().addAll(titleLabel, peopleLabel, listView, addButton, editButton, deleteButton,
-                lastNameLabel, lastNameField, firstNameLabel, firstNameField, middleNameLabel, middleNameField,
-                positionLabel, positionBox, rankLabel, rankField, birthdateLabel, birthdateField,
-                admissionYearLabel, admissionYearField, graduationYearLabel, graduationYearField);
+        Button saveButton1 = new Button("Save");
+        saveButton1.setOnAction(e -> saveTeacher(lastNameField1.getText(), firstNameField1.getText(), middleNameField1.getText(),
+                birthdayField1.getText(), departmentChoiceBox.getValue(), Double.parseDouble(salaryField.getText())));
+        GridPane.setConstraints(saveButton1, 0, 6);
 
-        Scene scene = new Scene(gridPane, 600, 600);
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        teacherPane.getChildren().addAll(lastNameLabel1, lastNameField1, firstNameLabel1, firstNameField1, middleNameLabel1, middleNameField1,
+                birthdayLabel1, birthdayField1, departmentLabel, departmentChoiceBox, salaryLabel, salaryField, saveButton1);
+
+        teacherTab.setContent(teacherPane);
+        tabPane.getTabs().add(teacherTab);
     }
 
-    private void addPerson() {
-        String lastName = lastNameField.getText().trim();
-        String firstName = firstNameField.getText().trim();
-        String middleName = middleNameField.getText().trim();
-        String position = positionBox.getValue();
-        String rank = rankField.getText().trim();
-        LocalDate birthdate = LocalDate.parse(birthdateField.getText().trim(), dateFormatter);
-        int admissionYear = Integer.parseInt(admissionYearField.getText().trim());
-        int graduationYear = Integer.parseInt(graduationYearField.getText().trim());
-
-        Person person = new Person(lastName, firstName, middleName);
-        people.add(person);
-        saveData();
-
-        clearFields();
+    private void saveTeacher(String text, String text1, String text2, String text3, String value, double parseDouble) {
     }
 
-    private void editPerson() {
-        Person selectedPerson = listView.getSelectionModel().getSelectedItem();
-        if (selectedPerson == null) {
-            return;
-        }
-
-        String lastName = lastNameField.getText().trim();
-        String firstName = firstNameField.getText().trim();
-        String middleName = middleNameField.getText().trim();
-        String position = positionBox.getValue();
-        String rank = rankField.getText().trim();
-        LocalDate birthdate = LocalDate.parse(birthdateField.getText().trim(), dateFormatter);
-        int admissionYear = Integer.parseInt(admissionYearField.getText().trim());
-        int graduationYear = Integer.parseInt(graduationYearField.getText().trim());
-
-//        selectedPerson.setSurname(lastName);
-//        selectedPerson.setFirstName(firstName);
-//        selectedPerson.setMiddleName(middleName);
-//        selectedPerson.setPosition(position);
-//        selectedPerson.setRank(rank);
-//        selectedPerson.setBirthdate(birthdate);
-//        selectedPerson.setAdmissionYear(admissionYear);
-//        selectedPerson.setGraduationYear(graduationYear);
-
-        listView.refresh();
-        saveData();
-        clearFields();
-    }
-
-    private void saveData() {
-        try {
-            String json = gson.toJson(people);
-            Files.writeString(Paths.get(FILE_NAME), json);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void clearFields() {
-        lastNameField.setText("");
-        firstNameField.setText("");
-        middleNameField.setText("");
-        rankField.setText("");
-        positionBox.getSelectionModel().clearSelection();
-        birthdateField.setText("");
-        admissionYearField.setText("");
-        graduationYearField.setText("");
-    }
-
-    private void deletePerson() {
-        Person selectedPerson = listView.getSelectionModel().getSelectedItem();
-        if (selectedPerson != null) {
-            people.remove(selectedPerson);
-            saveData();
-        }
-    }
 }

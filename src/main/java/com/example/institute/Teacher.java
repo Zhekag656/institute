@@ -31,4 +31,8 @@ public class Teacher extends Person{
                 ", position='" + position + '\'' +
                 '}';
     }
+
+    public void saveTeacher(){
+        return;
+    }
 }
