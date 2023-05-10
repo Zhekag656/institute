@@ -2,43 +2,23 @@ package com.example.institute;
 
 import java.time.LocalDate;
 
-public class Student {
-    private String name;
-    private String surname;
-    private String patronymic;
-    private LocalDate dateOfBirth;
+public class Student extends Person{
+    private String dateOfBirth;
     private int yearOfAdmission;
     private int yearOfGraduation;
 
-    public String getName() {
-        return name;
+    public Student(String surname, String firstName, String middleName, String dateOfBirth, int yearOfAdmission, int yearOfGraduation) {
+        super(surname, firstName, middleName);
+        this.dateOfBirth = dateOfBirth;
+        this.yearOfAdmission = yearOfAdmission;
+        this.yearOfGraduation = yearOfGraduation;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-    public String getPatronymic() {
-        return patronymic;
-    }
-
-    public void setPatronymic(String patronymic) {
-        this.patronymic = patronymic;
-    }
-
-    public LocalDate getDateOfBirth() {
+    public String getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(LocalDate dateOfBirth) {
+    public void setDateOfBirth(String dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 
@@ -58,12 +38,12 @@ public class Student {
         this.yearOfGraduation = yearOfGraduation;
     }
 
-    public Student(String name, String surname, String patronymic, LocalDate dateOfBirth, int yearOfAdmission, int yearOfGraduation) {
-        this.name = name;
-        this.surname = surname;
-        this.patronymic = patronymic;
-        this.dateOfBirth = dateOfBirth;
-        this.yearOfAdmission = yearOfAdmission;
-        this.yearOfGraduation = yearOfGraduation;
+    @Override
+    public String toString() {
+        return "Student{" +
+                "dateOfBirth='" + dateOfBirth + '\'' +
+                ", yearOfAdmission=" + yearOfAdmission +
+                ", yearOfGraduation=" + yearOfGraduation +
+                '}';
     }
 }

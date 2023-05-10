@@ -19,5 +19,11 @@ public class HelloApplication extends Application {
 
     public static void main(String[] args) {
         launch();
+
+        String[] data = {
+                "student, Ivanov, Ivan, Ivanovich, 10.10.2001, 2019, 2024",
+                "student, Ivanov, Ivan, Ivanovich, kandidat, vikladach"
+        };
+        DataSaver.saveData("data.txt", data);
     }
 }
