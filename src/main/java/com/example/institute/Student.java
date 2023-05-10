@@ -2,18 +2,16 @@ package com.example.institute;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.time.LocalDate;
-
 public class Student extends Person{
     private String dateOfBirth;
     private int yearOfAdmission;
     private int yearOfGraduation;
 
-    public Student(String surname, String firstName, String middleName, String dateOfBirth, int yearOfAdmission, int yearOfGraduation) {
+    public Student(String surname, String firstName, String middleName, String dateOfBirth, int yearOfAdmission, String yearOfGraduation) {
         super(surname, firstName, middleName);
         this.dateOfBirth = dateOfBirth;
         this.yearOfAdmission = yearOfAdmission;
-        this.yearOfGraduation = yearOfGraduation;
+        this.yearOfGraduation = Integer.parseInt(yearOfGraduation);
     }
 
     @JsonProperty("birthday")

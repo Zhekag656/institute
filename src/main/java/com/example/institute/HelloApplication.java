@@ -1,10 +1,7 @@
 package com.example.institute;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -13,36 +10,17 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
-import java.time.format.DateTimeFormatter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class HelloApplication extends Application {
-
-    private static final String FILE_NAME = "data.json";
-
-    private ObservableList<Person> people = FXCollections.observableArrayList();
-    private ListView<Person> listView = new ListView<>(people);
-
-    private TextField lastNameField = new TextField();
-    private TextField firstNameField = new TextField();
-    private TextField middleNameField = new TextField();
-    private TextField rankField = new TextField();
-    private ChoiceBox<String> positionBox = new ChoiceBox<>();
-    private TextField birthdateField = new TextField();
-    private TextField admissionYearField = new TextField();
-    private TextField graduationYearField = new TextField();
-
-    private DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-
-    private Gson gson = new GsonBuilder().setPrettyPrinting().create();
-
     public ArrayList<Teacher> teachers = new ArrayList<>();
     public ArrayList<Student> students = new ArrayList<>();
 
     @Override
     public void start(Stage primaryStage) {
 
-        primaryStage.setTitle("Institute App");
+        primaryStage.setTitle("Інститут");
         GridPane gridPane = new GridPane();
         gridPane.setPadding(new Insets(10, 10, 10, 10));
         gridPane.setHgap(10);
@@ -86,13 +64,19 @@ public class HelloApplication extends Application {
         positionChoiceBox.getItems().addAll("Викладач", "Старший викладач", "Доцент", "Професор");
         GridPane.setConstraints(positionChoiceBox, 1, 6);
 
-        Button saveButton1 = new Button("Save");
-        saveButton1.setOnAction(e -> saveTeacher(
-                teachersLastNameField.getText(),
-                teachersFirstNameField.getText(),
-                teachersMiddleNameField.getText(),
-                gradeChoiceBox.getValue(),
-                positionChoiceBox.getValue()));
+        Button saveButton1 = new Button("Зберегти");
+        saveButton1.setOnAction(e -> {
+            try {
+                saveTeacher(
+                        teachersLastNameField.getText(),
+                        teachersFirstNameField.getText(),
+                        teachersMiddleNameField.getText(),
+                        gradeChoiceBox.getValue(),
+                        positionChoiceBox.getValue());
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
         GridPane.setConstraints(saveButton1, 0, 8);
 
         teacherPane.getChildren().addAll(
@@ -125,18 +109,18 @@ public class HelloApplication extends Application {
 
         Label studentsLastNameLabel = new Label("Прізвище:");
         GridPane.setConstraints(studentsLastNameLabel, 0, 0);
-        TextField studentLastNameField = new TextField();
-        GridPane.setConstraints(studentLastNameField, 1, 0);
+        TextField studentsLastNameField = new TextField();
+        GridPane.setConstraints(studentsLastNameField, 1, 0);
 
         Label studentsFirstNameLabel = new Label("Ім'я:");
         GridPane.setConstraints(studentsFirstNameLabel, 0, 1);
-        TextField studentFirstNameField = new TextField();
-        GridPane.setConstraints(studentFirstNameField, 1, 1);
+        TextField studentsFirstNameField = new TextField();
+        GridPane.setConstraints(studentsFirstNameField, 1, 1);
 
         Label studentsMiddleNameLabel = new Label("По-батькові:");
         GridPane.setConstraints(studentsMiddleNameLabel, 0, 2);
-        TextField studentMiddleNameField = new TextField();
-        GridPane.setConstraints(studentMiddleNameField, 1, 2);
+        TextField studentsMiddleNameField = new TextField();
+        GridPane.setConstraints(studentsMiddleNameField, 1, 2);
 
         Label dateOfBirthLabel = new Label("Дата народження(рррр-мм-дд):");
         GridPane.setConstraints(dateOfBirthLabel, 0, 3);
@@ -154,22 +138,28 @@ public class HelloApplication extends Application {
         GridPane.setConstraints(yearOfGraduationField, 1, 5);
 
         Button studentSaveButton = new Button("Зберегти");
-        studentSaveButton.setOnAction(e -> saveStudent(
-                lastNameField.getText(),
-                firstNameField.getText(),
-                middleNameField.getText(),
-                dateOfBirthField.getText(),
-                Integer.parseInt(yearOfAdmissionField.getText()),
-                yearOfGraduationField.getText()));
+        studentSaveButton.setOnAction(e -> {
+            try {
+                saveStudent(
+                        studentsLastNameField.getText(),
+                        studentsFirstNameField.getText(),
+                        studentsMiddleNameField.getText(),
+                        dateOfBirthField.getText(),
+                        Integer.parseInt(yearOfAdmissionField.getText()),
+                        yearOfGraduationField.getText());
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
         GridPane.setConstraints(studentSaveButton, 0, 10);
 
         studentPane.getChildren().addAll(
                 studentsLastNameLabel,
-                studentLastNameField,
+                studentsLastNameField,
                 studentsFirstNameLabel,
-                studentFirstNameField,
+                studentsFirstNameField,
                 studentsMiddleNameLabel,
-                studentMiddleNameField,
+                studentsMiddleNameField,
                 dateOfBirthLabel,
                 dateOfBirthField,
                 yearOfAdmissionLabel,
@@ -215,7 +205,7 @@ public class HelloApplication extends Application {
 
         teachersTable.getColumns().addAll(lastNameColumn, firstNameColumn, middleNameColumn, birthdayColumn, departmentColumn);
 
-        teachersTable.setItems(FXCollections.observableArrayList(teachers)); // assuming teachers is a List<Teacher> containing all the teachers
+        teachersTable.setItems(FXCollections.observableArrayList(teachers));
 
         ScrollPane scrollPane = new ScrollPane(teachersTable);
         scrollPane.setFitToWidth(true);
@@ -292,14 +282,21 @@ public class HelloApplication extends Application {
         primaryStage.show();
     }
 
-    private void saveStudent(String text, String text1, String text2, String parseInt, int text3, String text4) {
+    private void saveStudent(String text, String text1, String text2, String parseInt, int text3, String text4) throws IOException {
+        Student newStudent = new Student(text, text1, text2, parseInt, text3, text4);
+
+        students.add(newStudent);
+
+        SaveService.saveStudents(students);
     }
 
 
-    private void saveTeacher(String lastName, String firstName, String middleName, String grade, String position) {
+    private void saveTeacher(String lastName, String firstName, String middleName, String grade, String position) throws IOException {
         Teacher newTeacher = new Teacher(lastName, firstName, middleName, grade, position);
 
         teachers.add(newTeacher);
+
+        SaveService.saveTeachers(teachers);
     }
 
 }
