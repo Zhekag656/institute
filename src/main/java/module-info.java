@@ -8,6 +8,8 @@ module com.example.institute {
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
     requires com.google.gson;
+    requires com.fasterxml.jackson.annotation;
+    requires com.fasterxml.jackson.databind;
     opens com.example.institute to javafx.fxml;
     exports com.example.institute;
 }

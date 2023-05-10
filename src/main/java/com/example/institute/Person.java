@@ -1,27 +1,29 @@
 package com.example.institute;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
 public class Person {
-    private String surname;
+    private String lastName;
     private String firstName;
     private String middleName;
 
     @Override
     public String toString() {
         return "Person{" +
-                "surname='" + surname + '\'' +
+                "surname='" + lastName + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", middleName='" + middleName + '\'' +
                 '}';
     }
 
-    public String getSurname() {
-        return surname;
+    @JsonProperty("last_name")
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
+    @JsonProperty("first_name")
     public String getFirstName() {
         return firstName;
     }
@@ -30,6 +32,7 @@ public class Person {
         this.firstName = firstName;
     }
 
+    @JsonProperty("middle_name")
     public String getMiddleName() {
         return middleName;
     }
@@ -38,8 +41,8 @@ public class Person {
         this.middleName = middleName;
     }
 
-    public Person(String surname, String firstName, String middleName) {
-        this.surname = surname;
+    public Person(String lastName, String firstName, String middleName) {
+        this.lastName = lastName;
         this.firstName = firstName;
         this.middleName = middleName;
     }

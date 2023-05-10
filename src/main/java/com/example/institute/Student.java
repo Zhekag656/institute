@@ -1,5 +1,7 @@
 package com.example.institute;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.time.LocalDate;
 
 public class Student extends Person{
@@ -14,6 +16,7 @@ public class Student extends Person{
         this.yearOfGraduation = yearOfGraduation;
     }
 
+    @JsonProperty("birthday")
     public String getDateOfBirth() {
         return dateOfBirth;
     }
@@ -22,6 +25,7 @@ public class Student extends Person{
         this.dateOfBirth = dateOfBirth;
     }
 
+    @JsonProperty("admission_year")
     public int getYearOfAdmission() {
         return yearOfAdmission;
     }
@@ -30,6 +34,7 @@ public class Student extends Person{
         this.yearOfAdmission = yearOfAdmission;
     }
 
+    @JsonProperty("graduation_name")
     public int getYearOfGraduation() {
         return yearOfGraduation;
     }
