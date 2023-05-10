@@ -7,6 +7,7 @@ module com.example.institute {
     requires com.dlsc.formsfx;
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
+    requires com.google.gson;
     opens com.example.institute to javafx.fxml;
     exports com.example.institute;
 }
