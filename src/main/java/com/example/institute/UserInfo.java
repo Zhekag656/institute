@@ -33,7 +33,7 @@ public class UserInfo extends Application {
 
         button.setOnAction(event -> {
             String surname = textField.getText();
-            String[] studentData = searchStudent(surname, students);
+            String[] studentData = searchStudent(surname);
             if (studentData != null) {
                 // виведення даних про студента
                 textArea.setText(String.format(
