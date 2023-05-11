@@ -13,6 +13,7 @@ import java.util.ArrayList;
 public class Institute extends Application {
     public ArrayList<Teacher> teachers = new ArrayList<>();
     public ArrayList<Student> students = new ArrayList<>();
+    StudentController studentController = new StudentController();
 
     @Override
     public void start(Stage primaryStage) throws IOException {
@@ -29,7 +30,7 @@ public class Institute extends Application {
 
         });
         button2.setOnAction(e -> {
-
+            studentController.outputStudents();
         });
 
         button3.setOnAction(e -> {
