@@ -12,8 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StudentController {
-
-    public static void saveStudents(List<Student> students) throws IOException {
+    public static void addStudents(List<Student> students) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         String userDir = System.getProperty("user.home");
         Path studentsFilePath = Paths.get(userDir, "students.json");
@@ -29,5 +28,17 @@ public class StudentController {
         mapper.writeValue(studentsFilePath.toFile(), existingStudents);
     }
 
+    public List<Student> showStudents() throws IOException{
+        ObjectMapper mapper = new ObjectMapper();
+        String userDir = System.getProperty("user.home");
+        Path studentsFilePath = Paths.get(userDir, "students.json");
+        File file = new File(studentsFilePath.toUri());
 
+        if (!Files.exists(studentsFilePath)){
+            file.createNewFile();
+            return new ArrayList<>();
+        } else {
+            return mapper.readValue(file, new TypeReference<List<Student>>() {});
+        }
+    }
 }
