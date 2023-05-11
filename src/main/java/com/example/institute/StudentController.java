@@ -55,7 +55,6 @@ public class StudentController {
     }
 
     public void addStudentsWindow(){
-            // Створення нового вікна
             Stage stage = new Stage();
             stage.setTitle("Додавання нового студента");
 
@@ -89,18 +88,18 @@ public class StudentController {
             yearOfGraduationField.setPromptText("Рік закінчення");
             container.getChildren().add(yearOfGraduationField);
 
-            // Додавання кнопки збереження
             Button studentSaveButton = new Button("Зберегти");
             studentSaveButton.setOnAction(e -> {
-                studentsLastNameField.getText(),
+                try {
+                    Student newStudent = new Student(
+                        studentsLastNameField.getText(),
                         studentsFirstNameField.getText(),
                         studentsMiddleNameField.getText(),
                         dateOfBirthField.getText(),
                         Integer.parseInt(yearOfAdmissionField.getText()),
                         yearOfGraduationField.getText());
-
-                try {
-                    StudentDao.addStudents();
+                    students.add(newStudent);
+                    StudentDao.addStudents(students);
                     stage.close();
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
@@ -108,7 +107,6 @@ public class StudentController {
             });
             container.getChildren().add(studentSaveButton);
 
-            // Відображення вікна
             Scene scene = new Scene(container);
             stage.setScene(scene);
             stage.show();

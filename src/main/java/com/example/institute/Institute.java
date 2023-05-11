@@ -27,7 +27,7 @@ public class Institute extends Application {
 
 
         button1.setOnAction(e -> {
-
+            studentController.addStudentsWindow();
         });
         button2.setOnAction(e -> {
             studentController.outputStudents();
