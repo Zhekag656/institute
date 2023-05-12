@@ -26,10 +26,11 @@ public class StudentDao {
         }
 
         for (Student student : students) {
-            student.setId(UUID.randomUUID().toString());
+            UUID id = UUID.randomUUID();
+            student.setId(String.valueOf(id));
+            existingStudents.add(student);
         }
 
-        existingStudents.addAll(students);
 
         mapper.writeValue(studentsFilePath.toFile(), existingStudents);
     }

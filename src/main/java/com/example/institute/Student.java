@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.UUID;
+
 public class Student extends Person{
     @SerializedName("birthday")
     private String dateOfBirth;
@@ -13,14 +15,14 @@ public class Student extends Person{
     private String yearOfGraduation;
 
     @JsonCreator
-    public Student(@JsonProperty("last_name") String surname,
+    public Student(@JsonProperty("id") UUID id,
+                   @JsonProperty("last_name") String surname,
                    @JsonProperty("first_name") String firstName,
                    @JsonProperty("middle_name") String middleName,
-                   @JsonProperty("id") String id,
                    @JsonProperty("birthday") String dateOfBirth,
                    @JsonProperty("admission_year") String yearOfAdmission,
                    @JsonProperty("graduation_year") String yearOfGraduation) {
-        super(surname, firstName, middleName, id);
+        super(String.valueOf(id), surname, firstName, middleName);
         this.dateOfBirth = dateOfBirth;
         this.yearOfAdmission = yearOfAdmission;
         this.yearOfGraduation = yearOfGraduation;

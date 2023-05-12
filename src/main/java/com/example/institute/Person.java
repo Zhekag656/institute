@@ -2,24 +2,27 @@ package com.example.institute;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.UUID;
+
 public class Person {
     @SerializedName("id")
-    private String id;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
+    private UUID id;
     @SerializedName("last_name")
     private String lastName;
     @SerializedName("first_name")
     private String firstName;
     @SerializedName("middle_name")
     private String middleName;
+
+    public Person(@JsonProperty("id") String id,
+                  @JsonProperty("last_name") String lastName,
+                  @JsonProperty("first_name") String firstName,
+                  @JsonProperty("middle_name") String middleName) {
+        this.id = UUID.fromString(id);
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.middleName = middleName;
+    }
 
     @Override
     public String toString() {
@@ -57,13 +60,12 @@ public class Person {
         this.middleName = middleName;
     }
 
-    public Person(@JsonProperty("last_name") String lastName,
-                  @JsonProperty("first_name") String firstName,
-                  @JsonProperty("middle_name") String middleName,
-                  @JsonProperty("id") String id) {
-        this.lastName = lastName;
-        this.firstName = firstName;
-        this.middleName = middleName;
-        this.id = id;
+    @JsonProperty("id")
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = UUID.fromString(id);
     }
 }

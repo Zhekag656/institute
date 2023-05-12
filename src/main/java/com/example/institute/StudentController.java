@@ -36,7 +36,7 @@ public class StudentController {
 
         studentsTable.getColumns().addAll(lastNameCol, firstNameCol, middleNameCol, birthDateCol, yearOfEntryCol, yearOfGraduationCol);
 
-        TableColumn<Student, Void> actionsColumn = new TableColumn<>("Дії");
+        TableColumn<Student, Void> actionsColumn = new TableColumn<>("Редагування");
 
 // Встановлюємо фабрику комірок, яка повертає нову комірку з кнопкою
         actionsColumn.setCellFactory(col -> {
@@ -65,7 +65,7 @@ public class StudentController {
             return cell;
         });
 
-// Додаємо стовпець до таблиці
+        // Додаємо стовпець до таблиці
         studentsTable.getColumns().add(actionsColumn);
 
         List<Student> students = null;
@@ -121,8 +121,9 @@ public class StudentController {
             Button studentSaveButton = new Button("Зберегти");
             studentSaveButton.setOnAction(e -> {
                 try {
+                    UUID id = UUID.randomUUID();
                     Student newStudent = new Student(
-                            UUID.randomUUID().toString(),
+                            id,
                             studentsLastNameField.getText(),
                             studentsFirstNameField.getText(),
                             studentsMiddleNameField.getText(),
