@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -219,8 +220,12 @@ public class StudentController {
             }
         });
 
+        VBox vbox = new VBox();
+        vbox.setSpacing(10);
+        vbox.setPadding(new Insets(10, 10, 10, 10));
+        vbox.getChildren().addAll(searchField, searchButton, studentsTable);
 
-        Scene scene = new Scene(studentsTable);
+        Scene scene = new Scene(vbox);
         stage.setScene(scene);
         stage.show();
     }
