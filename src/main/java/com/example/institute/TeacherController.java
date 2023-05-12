@@ -5,7 +5,6 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -157,7 +156,7 @@ public class TeacherController {
         ObservableList<String> positions = FXCollections.observableArrayList("Викладач", "Старший викладач", "Доцент", "Професор");
         ComboBoxTableCell<Teacher, String> comboBoxCell = new ComboBoxTableCell<>(positions);
         positionCol.setCellFactory(ComboBoxTableCell.forTableColumn(positions));
-        degreeCol.setCellValueFactory(new PropertyValueFactory<>("position"));
+        positionCol.setCellValueFactory(new PropertyValueFactory<>("position"));
         positionCol.setOnEditCommit(event -> {
             Teacher teacher = event.getRowValue();
             teacher.setPosition(event.getNewValue());

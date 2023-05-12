@@ -2,6 +2,13 @@ package com.example.institute;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.Scene;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,6 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -89,4 +97,45 @@ public class TeacherDao {
         mapper.writeValue(file, teachers);
     }
 
+    public List<Teacher> getAllTeachers() throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        String userDir = System.getProperty("user.home");
+        Path teachersFilePath = Paths.get(userDir, "teachers.json");
+        File file = new File(teachersFilePath.toUri());
+        List<Teacher> teachers = Arrays.asList(mapper.readValue(file, Teacher[].class));
+        return teachers;
+    }
+
+    public void showAcademicTeachers() throws IOException {
+        TableView<Teacher> academicTable = new TableView<>();
+        TableColumn<Teacher, String> lastNameCol = new TableColumn<>("Прізвище");
+        lastNameCol.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+        TableColumn<Teacher, String> firstNameCol = new TableColumn<>("Ім'я");
+        firstNameCol.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+        TableColumn<Teacher, String> middleNameCol = new TableColumn<>("По-батькові");
+        middleNameCol.setCellValueFactory(new PropertyValueFactory<>("middleName"));
+        TableColumn<Teacher, String> degreeCol = new TableColumn<>("Вчений ступінь");
+        degreeCol.setCellValueFactory(new PropertyValueFactory<>("academicDegree"));
+        TableColumn<Teacher, String> positionCol = new TableColumn<>("Посада");
+        positionCol.setCellValueFactory(new PropertyValueFactory<>("position"));
+
+        academicTable.getColumns().addAll(lastNameCol, firstNameCol, middleNameCol, degreeCol, positionCol);
+
+
+        List<Teacher> teachers = getAllTeachers();
+        ObservableList<Teacher> academicTeachers = FXCollections.observableArrayList();
+        for (Teacher teacher : teachers) {
+            String position = teacher.getPosition();
+            if (position.equals("Доцент") || position.equals("Професор")) {
+                academicTeachers.add(teacher);
+            }
+        }
+        academicTable.setItems(academicTeachers);
+
+        Stage academicStage = new Stage();
+        Scene academicScene = new Scene(academicTable);
+        academicStage.setScene(academicScene);
+        academicStage.show();
+
+    }
 }
