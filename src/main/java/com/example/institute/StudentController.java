@@ -142,7 +142,5 @@ public class StudentController {
             Scene scene = new Scene(container);
             stage.setScene(scene);
             stage.show();
-
-
     }
 }

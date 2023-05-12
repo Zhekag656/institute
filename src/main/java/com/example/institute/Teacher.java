@@ -1,13 +1,26 @@
 package com.example.institute;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.SerializedName;
+
+import java.util.UUID;
+
 public class Teacher extends Person{
+    @SerializedName("degree")
     private String academicDegree;
+    @SerializedName("position")
     private String position;
-    public Teacher(String surname, String firstName, String middleName, String academicDegree, String position, String id) {
-        super(surname, firstName, middleName, id);
+    public Teacher(@JsonProperty("id") UUID id,
+                   @JsonProperty("last_name") String surname,
+                   @JsonProperty("first_name") String firstName,
+                   @JsonProperty("middle_name") String middleName,
+                   @JsonProperty("degree") String academicDegree,
+                   @JsonProperty("position") String position) {
+        super(String.valueOf(id), surname, firstName, middleName);
         this.academicDegree = academicDegree;
         this.position = position;
     }
+    @JsonProperty("degree")
     public String getAcademicDegree() {
         return academicDegree;
     }
@@ -16,6 +29,7 @@ public class Teacher extends Person{
         this.academicDegree = academicDegree;
     }
 
+    @JsonProperty("position")
     public String getPosition() {
         return position;
     }
@@ -30,9 +44,5 @@ public class Teacher extends Person{
                 "academicDegree='" + academicDegree + '\'' +
                 ", position='" + position + '\'' +
                 '}';
-    }
-
-    public void saveTeacher(){
-        return;
     }
 }

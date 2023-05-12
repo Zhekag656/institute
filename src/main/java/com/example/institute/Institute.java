@@ -11,9 +11,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Institute extends Application {
-    public ArrayList<Teacher> teachers = new ArrayList<>();
-    public ArrayList<Student> students = new ArrayList<>();
     StudentController studentController = new StudentController();
+    TeacherController teacherController = new TeacherController();
 
     @Override
     public void start(Stage primaryStage) throws IOException {
@@ -22,8 +21,8 @@ public class Institute extends Application {
 
         Button button1 = new Button("Додати студента");
         Button button2 = new Button("Список студентів");
-        Button button3 = new Button("Пошук студентів");
-        Button button4 = new Button("Переглянути всіх професорів та доцентів");
+        Button button3 = new Button("Додати викладача");
+        Button button4 = new Button("Список викладачів");
 
 
         button1.setOnAction(e -> {
@@ -34,11 +33,11 @@ public class Institute extends Application {
         });
 
         button3.setOnAction(e -> {
-            // Відкриття форми 3
+            teacherController.addTeachersWindow();
         });
 
         button4.setOnAction(e -> {
-            // Відкриття форми 4
+            teacherController.outputTeachers();
         });
 
         gridPane.add(button1, 0, 0);
