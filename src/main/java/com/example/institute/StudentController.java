@@ -2,10 +2,7 @@ package com.example.institute;
 
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -14,6 +11,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class StudentController {
     List<Student> students = new ArrayList<>();
@@ -37,6 +35,38 @@ public class StudentController {
         yearOfGraduationCol.setCellValueFactory(new PropertyValueFactory<>("yearOfGraduation"));
 
         studentsTable.getColumns().addAll(lastNameCol, firstNameCol, middleNameCol, birthDateCol, yearOfEntryCol, yearOfGraduationCol);
+
+        TableColumn<Student, Void> actionsColumn = new TableColumn<>("Дії");
+
+// Встановлюємо фабрику комірок, яка повертає нову комірку з кнопкою
+        actionsColumn.setCellFactory(col -> {
+            TableCell<Student, Void> cell = new TableCell<>() {
+                private final Button editButton = new Button("Редагувати");
+
+                {
+                    editButton.setOnAction(event -> {
+                        // Обробник події для кнопки
+                        Student student = getTableView().getItems().get(getIndex());
+                        // дії, які виконуються при натисканні на кнопку "Редагувати"
+                    });
+                }
+
+                // Описуємо вміст комірки (в даному випадку кнопка "Редагувати")
+                @Override
+                protected void updateItem(Void item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setGraphic(null);
+                    } else {
+                        setGraphic(editButton);
+                    }
+                }
+            };
+            return cell;
+        });
+
+// Додаємо стовпець до таблиці
+        studentsTable.getColumns().add(actionsColumn);
 
         List<Student> students = null;
         try {
@@ -92,12 +122,13 @@ public class StudentController {
             studentSaveButton.setOnAction(e -> {
                 try {
                     Student newStudent = new Student(
-                        studentsLastNameField.getText(),
-                        studentsFirstNameField.getText(),
-                        studentsMiddleNameField.getText(),
-                        dateOfBirthField.getText(),
-                        yearOfAdmissionField.getText(),
-                        yearOfGraduationField.getText());
+                            UUID.randomUUID().toString(),
+                            studentsLastNameField.getText(),
+                            studentsFirstNameField.getText(),
+                            studentsMiddleNameField.getText(),
+                            dateOfBirthField.getText(),
+                            yearOfAdmissionField.getText(),
+                            yearOfGraduationField.getText());
                     students.add(newStudent);
                     StudentDao.addStudents(students);
                     stage.close();

@@ -16,10 +16,11 @@ public class Student extends Person{
     public Student(@JsonProperty("last_name") String surname,
                    @JsonProperty("first_name") String firstName,
                    @JsonProperty("middle_name") String middleName,
+                   @JsonProperty("id") String id,
                    @JsonProperty("birthday") String dateOfBirth,
                    @JsonProperty("admission_year") String yearOfAdmission,
                    @JsonProperty("graduation_year") String yearOfGraduation) {
-        super(surname, firstName, middleName);
+        super(surname, firstName, middleName, id);
         this.dateOfBirth = dateOfBirth;
         this.yearOfAdmission = yearOfAdmission;
         this.yearOfGraduation = yearOfGraduation;

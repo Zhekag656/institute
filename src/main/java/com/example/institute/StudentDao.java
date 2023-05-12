@@ -11,6 +11,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class StudentDao {
     public static void addStudents(List<Student> students) throws IOException {
@@ -22,6 +23,10 @@ public class StudentDao {
         if (Files.exists(studentsFilePath)){
             existingStudents = mapper.readValue(studentsFilePath.toFile(),
                     new TypeReference<List<Student>>(){});
+        }
+
+        for (Student student : students) {
+            student.setId(UUID.randomUUID().toString());
         }
 
         existingStudents.addAll(students);
