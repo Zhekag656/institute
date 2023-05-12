@@ -1,8 +1,13 @@
 package com.example.institute;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.SerializedName;
+
 public class Person {
+    @SerializedName("last_name")
     private String lastName;
+    @SerializedName("first_name")
     private String firstName;
+    @SerializedName("middle_name")
     private String middleName;
 
     @Override
@@ -41,7 +46,9 @@ public class Person {
         this.middleName = middleName;
     }
 
-    public Person(String lastName, String firstName, String middleName) {
+    public Person(@JsonProperty("last_name") String lastName,
+                  @JsonProperty("first_name") String firstName,
+                  @JsonProperty("middle_name") String middleName) {
         this.lastName = lastName;
         this.firstName = firstName;
         this.middleName = middleName;

@@ -20,7 +20,7 @@ public class Institute extends Application {
         GridPane gridPane = new GridPane();
         gridPane.setAlignment(Pos.CENTER);
 
-        Button button1 = new Button("Cписок вчителів");
+        Button button1 = new Button("Додати студента");
         Button button2 = new Button("Список студентів");
         Button button3 = new Button("Пошук студентів");
         Button button4 = new Button("Переглянути всіх професорів та доцентів");

@@ -28,11 +28,11 @@ public class StudentController {
         TableColumn<Student, String> firstNameCol = new TableColumn<>("Ім'я");
         firstNameCol.setCellValueFactory(new PropertyValueFactory<>("firstName"));
         TableColumn<Student, String> middleNameCol = new TableColumn<>("По-батькові");
-        middleNameCol.setCellValueFactory(new PropertyValueFactory<>("patronymic"));
+        middleNameCol.setCellValueFactory(new PropertyValueFactory<>("middleName"));
         TableColumn<Student, LocalDate> birthDateCol = new TableColumn<>("Дата народження");
-        birthDateCol.setCellValueFactory(new PropertyValueFactory<>("birthDate"));
+        birthDateCol.setCellValueFactory(new PropertyValueFactory<>("dateOfBirth"));
         TableColumn<Student, Integer> yearOfEntryCol = new TableColumn<>("Рік вступу");
-        yearOfEntryCol.setCellValueFactory(new PropertyValueFactory<>("yearOfEntry"));
+        yearOfEntryCol.setCellValueFactory(new PropertyValueFactory<>("yearOfAdmission"));
         TableColumn<Student, Integer> yearOfGraduationCol = new TableColumn<>("Рік закінчення");
         yearOfGraduationCol.setCellValueFactory(new PropertyValueFactory<>("yearOfGraduation"));
 
@@ -96,7 +96,7 @@ public class StudentController {
                         studentsFirstNameField.getText(),
                         studentsMiddleNameField.getText(),
                         dateOfBirthField.getText(),
-                        Integer.parseInt(yearOfAdmissionField.getText()),
+                        yearOfAdmissionField.getText(),
                         yearOfGraduationField.getText());
                     students.add(newStudent);
                     StudentDao.addStudents(students);
