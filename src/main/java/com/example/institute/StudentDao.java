@@ -48,4 +48,19 @@ public class StudentDao {
             return mapper.readValue(file, new TypeReference<List<Student>>() {});
         }
     }
+
+    public static void deleteStudent(Student student) throws IOException{
+        ObjectMapper mapper = new ObjectMapper();
+        String userDir = System.getProperty("user.home");
+        Path studentsFilePath = Paths.get(userDir, "students.json");
+
+        List<Student> students = new ArrayList<>();
+        if (Files.exists(studentsFilePath)){
+            students = mapper.readValue(studentsFilePath.toFile(),
+                    new TypeReference<List<Student>>() {});
+        }
+
+        students.remove(student);
+        mapper.writeValue(studentsFilePath.toFile(), students);
+    }
 }

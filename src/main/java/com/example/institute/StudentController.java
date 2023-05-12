@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public class StudentController {
@@ -36,36 +37,45 @@ public class StudentController {
 
         studentsTable.getColumns().addAll(lastNameCol, firstNameCol, middleNameCol, birthDateCol, yearOfEntryCol, yearOfGraduationCol);
 
-        TableColumn<Student, Void> actionsColumn = new TableColumn<>("Редагування");
+        TableColumn<Student, Void> actionsColumn = new TableColumn<>("Відрахування");
 
-// Встановлюємо фабрику комірок, яка повертає нову комірку з кнопкою
         actionsColumn.setCellFactory(col -> {
             TableCell<Student, Void> cell = new TableCell<>() {
-                private final Button editButton = new Button("Редагувати");
+                private final Button deleteButton = new Button("Видалити");
 
                 {
-                    editButton.setOnAction(event -> {
-                        // Обробник події для кнопки
-                        Student student = getTableView().getItems().get(getIndex());
-                        // дії, які виконуються при натисканні на кнопку "Редагувати"
+                    deleteButton.setOnAction(event -> {
+                        Student selectedStudent = studentsTable.getSelectionModel().getSelectedItem();
+                        try {
+                            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                            alert.setTitle("Підтвердження відрахування");
+                            alert.setHeaderText("Відрахування студента");
+                            alert.setContentText("Ви впевнені, що хочете відрахувати цього студента?");
+
+                            Optional<ButtonType> result = alert.showAndWait();
+                            if (result.isPresent() && result.get() == ButtonType.OK) {
+                                students.remove(selectedStudent);
+                                StudentDao.deleteStudent(selectedStudent);
+                                stage.close();
+                            }
+                        }catch (IOException e){
+                            e.printStackTrace();
+                        }
                     });
                 }
-
-                // Описуємо вміст комірки (в даному випадку кнопка "Редагувати")
                 @Override
                 protected void updateItem(Void item, boolean empty) {
                     super.updateItem(item, empty);
                     if (empty) {
                         setGraphic(null);
                     } else {
-                        setGraphic(editButton);
+                        setGraphic(deleteButton);
                     }
                 }
             };
             return cell;
         });
 
-        // Додаємо стовпець до таблиці
         studentsTable.getColumns().add(actionsColumn);
 
         List<Student> students = null;
