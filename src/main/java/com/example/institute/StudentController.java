@@ -4,6 +4,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -22,18 +23,92 @@ public class StudentController {
         stage.setTitle("List of students");
 
         TableView<Student> studentsTable = new TableView<>();
+        studentsTable.setEditable(true);
+
+
         TableColumn<Student, String> lastNameCol = new TableColumn<>("Прізвище");
         lastNameCol.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+        lastNameCol.setCellFactory(TextFieldTableCell.forTableColumn());
+        lastNameCol.setOnEditCommit(event -> {
+            Student student = event.getRowValue();
+            student.setLastName(event.getNewValue());
+            try {
+                studentDao.saveStudentAfterUpdate(student);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+
         TableColumn<Student, String> firstNameCol = new TableColumn<>("Ім'я");
         firstNameCol.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+        firstNameCol.setCellFactory(TextFieldTableCell.forTableColumn());
+        firstNameCol.setOnEditCommit(event -> {
+            Student student = event.getRowValue();
+            student.setFirstName(event.getNewValue());
+            try {
+                studentDao.saveStudentAfterUpdate(student);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+
         TableColumn<Student, String> middleNameCol = new TableColumn<>("По-батькові");
         middleNameCol.setCellValueFactory(new PropertyValueFactory<>("middleName"));
-        TableColumn<Student, LocalDate> birthDateCol = new TableColumn<>("Дата народження");
+        middleNameCol.setCellFactory(TextFieldTableCell.forTableColumn());
+        middleNameCol.setOnEditCommit(event -> {
+            Student student = event.getRowValue();
+            student.setMiddleName(event.getNewValue());
+            try {
+                studentDao.saveStudentAfterUpdate(student);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+
+        TableColumn<Student, String> birthDateCol = new TableColumn<>("Дата народження");
         birthDateCol.setCellValueFactory(new PropertyValueFactory<>("dateOfBirth"));
-        TableColumn<Student, Integer> yearOfEntryCol = new TableColumn<>("Рік вступу");
+        birthDateCol.setCellFactory(TextFieldTableCell.forTableColumn());
+        birthDateCol.setOnEditCommit(event -> {
+            Student student = event.getRowValue();
+            student.setDateOfBirth(event.getNewValue());
+            try {
+                studentDao.saveStudentAfterUpdate(student);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+
+        TableColumn<Student, String> yearOfEntryCol = new TableColumn<>("Рік вступу");
         yearOfEntryCol.setCellValueFactory(new PropertyValueFactory<>("yearOfAdmission"));
-        TableColumn<Student, Integer> yearOfGraduationCol = new TableColumn<>("Рік закінчення");
+        yearOfEntryCol.setCellFactory(TextFieldTableCell.forTableColumn());
+        yearOfEntryCol.setOnEditCommit(event -> {
+            Student student = event.getRowValue();
+            student.setYearOfAdmission(event.getNewValue());
+            try {
+                studentDao.saveStudentAfterUpdate(student);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+
+        TableColumn<Student, String> yearOfGraduationCol = new TableColumn<>("Рік закінчення");
         yearOfGraduationCol.setCellValueFactory(new PropertyValueFactory<>("yearOfGraduation"));
+        yearOfGraduationCol.setCellFactory(TextFieldTableCell.forTableColumn());
+        yearOfEntryCol.setOnEditCommit(event -> {
+            Student student = event.getRowValue();
+            student.setYearOfGraduation(event.getNewValue());
+            try {
+                studentDao.saveStudentAfterUpdate(student);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
 
         studentsTable.getColumns().addAll(lastNameCol, firstNameCol, middleNameCol, birthDateCol, yearOfEntryCol, yearOfGraduationCol);
 
@@ -41,7 +116,7 @@ public class StudentController {
 
         actionsColumn.setCellFactory(col -> {
             TableCell<Student, Void> cell = new TableCell<>() {
-                private final Button deleteButton = new Button("Видалити");
+                private final Button deleteButton = new Button("Відрахувати");
 
                 {
                     deleteButton.setOnAction(event -> {

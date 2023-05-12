@@ -1,21 +1,18 @@
 package com.example.institute;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.CheckBoxTableCell;
+import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -97,16 +94,80 @@ public class TeacherController {
         stage.setTitle("Список викладачів");
 
         TableView<Teacher> teachersTable = new TableView<>();
+        teachersTable.setEditable(true);
+
+
         TableColumn<Teacher, String> lastNameCol = new TableColumn<>("Прізвище");
         lastNameCol.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+        lastNameCol.setCellFactory(TextFieldTableCell.forTableColumn());
+        lastNameCol.setOnEditCommit(event -> {
+            Teacher teacher = event.getRowValue();
+            teacher.setLastName(event.getNewValue());
+            try {
+                teacherDao.saveTeacherAfterUpdate(teacher);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+
         TableColumn<Teacher, String> firstNameCol = new TableColumn<>("Ім'я");
         firstNameCol.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+        firstNameCol.setCellFactory(TextFieldTableCell.forTableColumn());
+        firstNameCol.setOnEditCommit(event -> {
+            Teacher teacher = event.getRowValue();
+            teacher.setFirstName(event.getNewValue());
+            try {
+                teacherDao.saveTeacherAfterUpdate(teacher);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
         TableColumn<Teacher, String> middleNameCol = new TableColumn<>("По-батькові");
         middleNameCol.setCellValueFactory(new PropertyValueFactory<>("middleName"));
+        middleNameCol.setCellFactory(TextFieldTableCell.forTableColumn());
+        middleNameCol.setOnEditCommit(event -> {
+            Teacher teacher = event.getRowValue();
+            teacher.setMiddleName(event.getNewValue());
+            try {
+                teacherDao.saveTeacherAfterUpdate(teacher);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
         TableColumn<Teacher, String> degreeCol = new TableColumn<>("Вчений ступінь");
+        ObservableList<String> academicDegrees = FXCollections.observableArrayList("Кандидат наук", "Доктор наук");
+        ComboBoxTableCell<Teacher, String> comboBoxDegreeCell = new ComboBoxTableCell<>(academicDegrees);
+        degreeCol.setCellFactory(ComboBoxTableCell.forTableColumn(academicDegrees));
         degreeCol.setCellValueFactory(new PropertyValueFactory<>("academicDegree"));
+        degreeCol.setOnEditCommit(event -> {
+            Teacher teacher = event.getRowValue();
+            teacher.setAcademicDegree(String.valueOf(event.getNewValue()));
+            try {
+                teacherDao.saveTeacherAfterUpdate(teacher);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+
         TableColumn<Teacher, String> positionCol = new TableColumn<>("Посада");
-        positionCol.setCellValueFactory(new PropertyValueFactory<>("position"));
+        ObservableList<String> positions = FXCollections.observableArrayList("Викладач", "Старший викладач", "Доцент", "Професор");
+        ComboBoxTableCell<Teacher, String> comboBoxCell = new ComboBoxTableCell<>(positions);
+        positionCol.setCellFactory(ComboBoxTableCell.forTableColumn(positions));
+        degreeCol.setCellValueFactory(new PropertyValueFactory<>("position"));
+        positionCol.setOnEditCommit(event -> {
+            Teacher teacher = event.getRowValue();
+            teacher.setPosition(event.getNewValue());
+            try {
+                teacherDao.saveTeacherAfterUpdate(teacher);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
 
         teachersTable.getColumns().addAll(lastNameCol, firstNameCol, middleNameCol, degreeCol, positionCol);
 

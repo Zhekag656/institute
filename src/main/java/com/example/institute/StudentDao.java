@@ -63,4 +63,31 @@ public class StudentDao {
         students.remove(student);
         mapper.writeValue(studentsFilePath.toFile(), students);
     }
+
+    public void saveStudentAfterUpdate(Student student) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        String userDir = System.getProperty("user.home");
+        Path teachersFilePath = Paths.get(userDir, "students.json");
+        File file = new File(teachersFilePath.toUri());
+
+        // отримуємо список всіх вчителів з JSON файлу
+        List<Student> students = mapper.readValue(file, new TypeReference<List<Student>>(){});
+
+        // знаходимо індекс оновлюваного вчителя в списку
+        int index = -1;
+        for (int i = 0; i < students.size(); i++) {
+            if (students.get(i).getId().equals(student.getId())) {
+                index = i;
+                break;
+            }
+        }
+
+        // оновлюємо вчителя в списку
+        if (index >= 0) {
+            students.set(index, student);
+        }
+
+        // зберігаємо список в JSON файлі
+        mapper.writeValue(file, students);
+    }
 }
