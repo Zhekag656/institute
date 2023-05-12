@@ -31,7 +31,11 @@ public class Institute extends Application {
             studentController.addStudentsWindow();
         });
         button2.setOnAction(e -> {
-            studentController.outputStudents();
+            try {
+                studentController.outputStudents();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
         });
 
         button3.setOnAction(e -> {

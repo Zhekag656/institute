@@ -3,6 +3,10 @@ package com.example.institute;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.scene.control.TableView;
 
 import java.io.File;
 import java.io.IOException;
@@ -89,5 +93,10 @@ public class StudentDao {
 
         // зберігаємо список в JSON файлі
         mapper.writeValue(file, students);
+    }
+
+    public void filterByLastName(String searchValue, TableView<Student> studentTable) throws IOException {
+
+
     }
 }

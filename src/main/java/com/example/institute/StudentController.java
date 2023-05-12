@@ -1,5 +1,11 @@
 package com.example.institute;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -9,6 +15,9 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +27,7 @@ import java.util.UUID;
 public class StudentController {
     List<Student> students = new ArrayList<>();
     StudentDao studentDao = new StudentDao();
-    public void outputStudents(){
+    public void outputStudents() throws IOException {
         Stage stage = new Stage();
         stage.setTitle("List of students");
 
@@ -163,6 +172,53 @@ public class StudentController {
         if (students != null){
             studentsTable.getItems().addAll(students);
         }
+
+
+        TextField searchField = new TextField();
+        searchField.setPromptText("Введіть прізвище студента");
+        Button searchButton = new Button("Пошук");
+
+        ObjectMapper mapper = new ObjectMapper();
+        String userDir = System.getProperty("user.home");
+        Path studentsFilePath = Paths.get(userDir, "students.json");
+
+        List<Student> existingStudents = new ArrayList<>();
+        if (Files.exists(studentsFilePath)){
+            existingStudents = mapper.readValue(studentsFilePath.toFile(),
+                    new TypeReference<List<Student>>(){});
+        }
+        ObservableList<Student> studentObservableList = FXCollections.observableList(existingStudents);
+
+        FilteredList<Student> filteredData = new FilteredList<>(studentObservableList, p -> true);
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredData.setPredicate(student -> {
+                if (newValue == null || newValue.isEmpty()){
+                    return true;
+                }
+
+                String lowerCaseFilter = newValue.toLowerCase();
+
+                if (student.getLastName().toLowerCase().contains(lowerCaseFilter)){
+                    return true;
+                }
+
+                return false;
+            });
+        });
+
+        SortedList<Student> sortedData = new SortedList<>(filteredData);
+
+        sortedData.comparatorProperty().bind(studentsTable.comparatorProperty());
+
+        studentsTable.setItems(sortedData);
+
+        searchButton.setOnAction(e -> {
+            String searchValue = searchField.getText().trim();
+            if (!searchValue.isEmpty()){
+                filteredData.setPredicate(student -> student.getLastName().toLowerCase().contains(searchValue.toLowerCase()));
+            }
+        });
+
 
         Scene scene = new Scene(studentsTable);
         stage.setScene(scene);
