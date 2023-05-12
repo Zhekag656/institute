@@ -18,6 +18,7 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public class TeacherController {
@@ -108,6 +109,48 @@ public class TeacherController {
         positionCol.setCellValueFactory(new PropertyValueFactory<>("position"));
 
         teachersTable.getColumns().addAll(lastNameCol, firstNameCol, middleNameCol, degreeCol, positionCol);
+
+        TableColumn<Teacher, Void> deleteColumn = new TableColumn<>("Звільнення");
+
+        deleteColumn.setCellFactory(col -> {
+            TableCell<Teacher, Void> cell = new TableCell<>(){
+              private final Button deleteButton = new Button("Звільнити");
+
+                {
+                    deleteButton.setOnAction(event -> {
+                        Teacher selectedTeacher = teachersTable.getSelectionModel().getSelectedItem();
+                        try {
+                            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                            alert.setTitle("Підтвердження звільнення");
+                            alert.setHeaderText("Звільнення викладача");
+                            alert.setContentText("Ви впевнені, що хочете звільнити обраного викладача?");
+
+                            Optional<ButtonType> result = alert.showAndWait();
+                            if (result.isPresent() && result.get() == ButtonType.OK){
+                                teachers.remove(selectedTeacher);
+                                TeacherDao.deleteTeacher(selectedTeacher);
+                                stage.close();
+                            }
+                        } catch (IOException e){
+                            e.printStackTrace();
+                        }
+                    });
+                }
+
+                @Override
+                protected void updateItem(Void item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setGraphic(null);
+                    } else {
+                        setGraphic(deleteButton);
+                    }
+                }
+            };
+            return cell;
+        });
+
+        teachersTable.getColumns().add(deleteColumn);
 
         List<Teacher> teachers = null;
         try {

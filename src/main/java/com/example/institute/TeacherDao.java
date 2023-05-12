@@ -46,4 +46,19 @@ public class TeacherDao {
             return mapper.readValue(file, new TypeReference<List<Teacher>>() {});
         }
     }
+
+    public static void deleteTeacher(Teacher teacher) throws IOException{
+        ObjectMapper mapper = new ObjectMapper();
+        String userDir = System.getProperty("user.home");
+        Path teachersFilePath = Paths.get(userDir, "teachers.json");
+
+        List<Teacher> teachers = new ArrayList<>();
+        if (Files.exists(teachersFilePath)){
+            teachers = mapper.readValue(teachersFilePath.toFile(),
+                    new TypeReference<List<Teacher>>() {});
+        }
+
+        teachers.remove(teacher);
+        mapper.writeValue(teachersFilePath.toFile(), teachers);
+    }
 }
