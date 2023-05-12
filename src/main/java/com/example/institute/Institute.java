@@ -17,14 +17,24 @@ public class Institute extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
+        primaryStage.setTitle("Інформаційна система");
+
         GridPane gridPane = new GridPane();
         gridPane.setAlignment(Pos.CENTER);
+
+
 
         Button button1 = new Button("Додати студента");
         Button button2 = new Button("Список студентів");
         Button button3 = new Button("Додати викладача");
         Button button4 = new Button("Список викладачів");
         Button button5 = new Button("Показати доцентів та професорів");
+
+        button1.setStyle("-fx-background-color: #FFFFFF; -fx-font-size: 14pt; -fx-text-fill: #000000; -fx-pref-width: 400px; -fx-pref-height: 30px;");
+        button2.setStyle("-fx-background-color: #FFFFFF; -fx-font-size: 14pt; -fx-text-fill: #000000; -fx-pref-width: 400px; -fx-pref-height: 30px;");
+        button3.setStyle("-fx-background-color: #FFFFFF; -fx-font-size: 14pt; -fx-text-fill: #000000; -fx-pref-width: 400px; -fx-pref-height: 30px;");
+        button4.setStyle("-fx-background-color: #FFFFFF; -fx-font-size: 14pt; -fx-text-fill: #000000; -fx-pref-width: 400px; -fx-pref-height: 30px;");
+        button5.setStyle("-fx-background-color: #FFFFFF; -fx-font-size: 14pt; -fx-text-fill: #000000; -fx-pref-width: 400px; -fx-pref-height: 30px;");
 
 
         button1.setOnAction(e -> {
@@ -64,7 +74,7 @@ public class Institute extends Application {
         gridPane.setVgap(10);
         gridPane.setAlignment(Pos.CENTER);
 
-        Scene scene = new Scene(gridPane, 300, 300);
+        Scene scene = new Scene(gridPane, 900, 800);
 
         primaryStage.setScene(scene);
         primaryStage.show();

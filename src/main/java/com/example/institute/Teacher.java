@@ -3,6 +3,7 @@ package com.example.institute;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class Teacher extends Person{
@@ -44,5 +45,18 @@ public class Teacher extends Person{
                 "academicDegree='" + academicDegree + '\'' +
                 ", position='" + position + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Teacher teacher = (Teacher) o;
+        return Objects.equals(academicDegree, teacher.academicDegree) && Objects.equals(position, teacher.position);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(academicDegree, position);
     }
 }

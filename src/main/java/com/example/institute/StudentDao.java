@@ -1,12 +1,7 @@
 package com.example.institute;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
-import javafx.scene.control.TableView;
 
 import java.io.File;
 import java.io.IOException;
@@ -74,10 +69,8 @@ public class StudentDao {
         Path teachersFilePath = Paths.get(userDir, "students.json");
         File file = new File(teachersFilePath.toUri());
 
-        // отримуємо список всіх вчителів з JSON файлу
         List<Student> students = mapper.readValue(file, new TypeReference<List<Student>>(){});
 
-        // знаходимо індекс оновлюваного вчителя в списку
         int index = -1;
         for (int i = 0; i < students.size(); i++) {
             if (students.get(i).getId().equals(student.getId())) {
@@ -86,17 +79,10 @@ public class StudentDao {
             }
         }
 
-        // оновлюємо вчителя в списку
         if (index >= 0) {
             students.set(index, student);
         }
 
-        // зберігаємо список в JSON файлі
         mapper.writeValue(file, students);
-    }
-
-    public void filterByLastName(String searchValue, TableView<Student> studentTable) throws IOException {
-
-
     }
 }

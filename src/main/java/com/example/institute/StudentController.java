@@ -7,6 +7,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -30,7 +31,9 @@ public class StudentController {
     StudentDao studentDao = new StudentDao();
     public void outputStudents() throws IOException {
         Stage stage = new Stage();
-        stage.setTitle("List of students");
+        stage.setTitle("Список студентів");
+
+
 
         TableView<Student> studentsTable = new TableView<>();
         studentsTable.setEditable(true);
@@ -129,6 +132,7 @@ public class StudentController {
                 private final Button deleteButton = new Button("Відрахувати");
 
                 {
+                    deleteButton.setStyle("-fx-background-color: red; -fx-font-size: 10pt; -fx-text-fill: #000000; -fx-pref-width: 100px; -fx-pref-height: 20px;");
                     deleteButton.setOnAction(event -> {
                         Student selectedStudent = studentsTable.getSelectionModel().getSelectedItem();
                         try {
@@ -178,6 +182,7 @@ public class StudentController {
         TextField searchField = new TextField();
         searchField.setPromptText("Введіть прізвище студента");
         Button searchButton = new Button("Пошук");
+        searchButton.setStyle("-fx-background-color: #FFFFFF; -fx-font-size: 14pt; -fx-text-fill: #000000; -fx-pref-width: 400px; -fx-pref-height: 30px;");
 
         ObjectMapper mapper = new ObjectMapper();
         String userDir = System.getProperty("user.home");
@@ -224,69 +229,70 @@ public class StudentController {
         vbox.setSpacing(10);
         vbox.setPadding(new Insets(10, 10, 10, 10));
         vbox.getChildren().addAll(searchField, searchButton, studentsTable);
+        vbox.setAlignment(Pos.CENTER);
 
-        Scene scene = new Scene(vbox);
+        Scene scene = new Scene(vbox, 900, 800);
         stage.setScene(scene);
         stage.show();
     }
 
     public void addStudentsWindow(){
-            Stage stage = new Stage();
-            stage.setTitle("Додавання нового студента");
+        Stage stage = new Stage();
+        stage.setTitle("Додавання нового студента");
 
-            // Створення контейнера для форми
-            VBox container = new VBox();
-            container.setSpacing(10);
-            container.setPadding(new Insets(10));
+        VBox container = new VBox();
+        container.setSpacing(10);
+        container.setPadding(new Insets(10));
+        container.setAlignment(Pos.CENTER);
 
-            // Додавання полів вводу
-            TextField studentsLastNameField = new TextField();
-            studentsLastNameField.setPromptText("Прізвище");
-            container.getChildren().add(studentsLastNameField);
+        TextField studentsLastNameField = new TextField();
+        studentsLastNameField.setPromptText("Прізвище");
+        container.getChildren().add(studentsLastNameField);
 
-            TextField studentsFirstNameField = new TextField();
-            studentsFirstNameField.setPromptText("Ім'я");
-            container.getChildren().add(studentsFirstNameField);
+        TextField studentsFirstNameField = new TextField();
+        studentsFirstNameField.setPromptText("Ім'я");
+        container.getChildren().add(studentsFirstNameField);
 
-            TextField studentsMiddleNameField = new TextField();
-            studentsMiddleNameField.setPromptText("По-батькові");
-            container.getChildren().add(studentsMiddleNameField);
+        TextField studentsMiddleNameField = new TextField();
+        studentsMiddleNameField.setPromptText("По-батькові");
+        container.getChildren().add(studentsMiddleNameField);
 
-            TextField dateOfBirthField = new TextField();
-            dateOfBirthField.setPromptText("Дата народження (рррр-мм-дд)");
-            container.getChildren().add(dateOfBirthField);
+        TextField dateOfBirthField = new TextField();
+        dateOfBirthField.setPromptText("Дата народження (рррр-мм-дд)");
+        container.getChildren().add(dateOfBirthField);
 
-            TextField yearOfAdmissionField = new TextField();
-            yearOfAdmissionField.setPromptText("Рік вступу");
-            container.getChildren().add(yearOfAdmissionField);
+        TextField yearOfAdmissionField = new TextField();
+        yearOfAdmissionField.setPromptText("Рік вступу");
+        container.getChildren().add(yearOfAdmissionField);
 
-            TextField yearOfGraduationField = new TextField();
-            yearOfGraduationField.setPromptText("Рік закінчення");
-            container.getChildren().add(yearOfGraduationField);
+        TextField yearOfGraduationField = new TextField();
+        yearOfGraduationField.setPromptText("Рік закінчення");
+        container.getChildren().add(yearOfGraduationField);
 
-            Button studentSaveButton = new Button("Зберегти");
-            studentSaveButton.setOnAction(e -> {
-                try {
-                    UUID id = UUID.randomUUID();
-                    Student newStudent = new Student(
-                            id,
-                            studentsLastNameField.getText(),
-                            studentsFirstNameField.getText(),
-                            studentsMiddleNameField.getText(),
-                            dateOfBirthField.getText(),
-                            yearOfAdmissionField.getText(),
-                            yearOfGraduationField.getText());
-                    students.add(newStudent);
-                    StudentDao.addStudents(students);
-                    stage.close();
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
-            });
-            container.getChildren().add(studentSaveButton);
+        Button studentSaveButton = new Button("Зберегти");
+        studentSaveButton.setStyle("-fx-background-color: #FFFFFF; -fx-font-size: 14pt; -fx-text-fill: #000000; -fx-pref-width: 400px; -fx-pref-height: 30px;");
+        studentSaveButton.setOnAction(e -> {
+            try {
+                UUID id = UUID.randomUUID();
+                Student newStudent = new Student(
+                        id,
+                        studentsLastNameField.getText(),
+                        studentsFirstNameField.getText(),
+                        studentsMiddleNameField.getText(),
+                        dateOfBirthField.getText(),
+                        yearOfAdmissionField.getText(),
+                        yearOfGraduationField.getText());
+                students.add(newStudent);
+                StudentDao.addStudents(students);
+                stage.close();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+        container.getChildren().add(studentSaveButton);
 
-            Scene scene = new Scene(container);
-            stage.setScene(scene);
-            stage.show();
+        Scene scene = new Scene(container, 900, 800);
+        stage.setScene(scene);
+        stage.show();
     }
 }

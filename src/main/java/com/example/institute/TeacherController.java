@@ -3,6 +3,7 @@ package com.example.institute;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.ComboBoxTableCell;
@@ -23,11 +24,12 @@ public class TeacherController {
 
     TeacherDao teacherDao = new TeacherDao();
 
-    public void addTeachersWindow(){
+    public void addTeachersWindow() {
         Stage stage = new Stage();
         stage.setTitle("Додавання викладача");
 
         VBox container = new VBox();
+        container.setAlignment(Pos.CENTER);
         container.setSpacing(10);
         container.setPadding(new Insets(10));
 
@@ -50,9 +52,10 @@ public class TeacherController {
                 "Доктор наук"
         );
         ComboBox<String> degreeComboBox = new ComboBox<>(degreeList);
+        degreeComboBox.setStyle("-fx-pref-width: 300px");
         container.getChildren().add(degreeComboBox);
 
-        Label positionLabel = new Label("Науковий ступінь:");
+        Label positionLabel = new Label("Посада:");
         container.getChildren().add(positionLabel);
         ObservableList<String> positionList = FXCollections.observableArrayList(
                 "Викладач",
@@ -61,9 +64,11 @@ public class TeacherController {
                 "Професор"
         );
         ComboBox<String> positionComboBox = new ComboBox<>(positionList);
+        positionComboBox.setStyle("-fx-pref-width: 300px");
         container.getChildren().add(positionComboBox);
 
         Button teacherSaveButton = new Button("Зберегти");
+        teacherSaveButton.setStyle("-fx-background-color: #FFFFFF; -fx-font-size: 14pt; -fx-text-fill: #000000; -fx-pref-width: 400px; -fx-pref-height: 30px;");
         teacherSaveButton.setOnAction(e -> {
             try {
                 UUID id = UUID.randomUUID();
@@ -83,10 +88,11 @@ public class TeacherController {
         });
         container.getChildren().add(teacherSaveButton);
 
-        Scene scene = new Scene(container);
+        Scene scene = new Scene(container, 900, 800);
         stage.setScene(scene);
         stage.show();
     }
+
 
     public void outputTeachers(){
         Stage stage = new Stage();
@@ -177,6 +183,7 @@ public class TeacherController {
               private final Button deleteButton = new Button("Звільнити");
 
                 {
+                    deleteButton.setStyle("-fx-background-color: red; -fx-font-size: 10pt; -fx-text-fill: #000000; -fx-pref-width: 100px; -fx-pref-height: 20px;");
                     deleteButton.setOnAction(event -> {
                         Teacher selectedTeacher = teachersTable.getSelectionModel().getSelectedItem();
                         try {
@@ -223,7 +230,7 @@ public class TeacherController {
             teachersTable.getItems().addAll(teachers);
         }
 
-        Scene scene = new Scene(teachersTable);
+        Scene scene = new Scene(teachersTable, 900, 800);
         stage.setScene(scene);
         stage.show();
     }

@@ -76,10 +76,8 @@ public class TeacherDao {
         Path teachersFilePath = Paths.get(userDir, "teachers.json");
         File file = new File(teachersFilePath.toUri());
 
-        // отримуємо список всіх вчителів з JSON файлу
         List<Teacher> teachers = mapper.readValue(file, new TypeReference<List<Teacher>>(){});
 
-        // знаходимо індекс оновлюваного вчителя в списку
         int index = -1;
         for (int i = 0; i < teachers.size(); i++) {
             if (teachers.get(i).getId().equals(teacher.getId())) {
@@ -88,12 +86,10 @@ public class TeacherDao {
             }
         }
 
-        // оновлюємо вчителя в списку
         if (index >= 0) {
             teachers.set(index, teacher);
         }
 
-        // зберігаємо список в JSON файлі
         mapper.writeValue(file, teachers);
     }
 
@@ -133,7 +129,8 @@ public class TeacherDao {
         academicTable.setItems(academicTeachers);
 
         Stage academicStage = new Stage();
-        Scene academicScene = new Scene(academicTable);
+        academicStage.setTitle("Доценти і професори");
+        Scene academicScene = new Scene(academicTable, 900, 800);
         academicStage.setScene(academicScene);
         academicStage.show();
 
