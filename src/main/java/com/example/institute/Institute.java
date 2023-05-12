@@ -7,7 +7,10 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 
 public class Institute extends Application {
     StudentController studentController = new StudentController();
@@ -17,6 +20,29 @@ public class Institute extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
+        try {
+            String homePath = System.getProperty("user.home");
+
+            File studentsFile = new File(homePath + File.separator + "students.json");
+            if (!studentsFile.exists()) {
+                studentsFile.createNewFile();
+                FileWriter fileWriter = new FileWriter(studentsFile);
+                fileWriter.write("[]");
+                fileWriter.close();
+            }
+
+            File teachersFile = new File(homePath + File.separator + "teachers.json");
+            if (!teachersFile.exists()) {
+                teachersFile.createNewFile();
+                FileWriter fileWriter = new FileWriter(teachersFile);
+                fileWriter.write("[]");
+                fileWriter.close();
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         primaryStage.setTitle("Інформаційна система");
 
         GridPane gridPane = new GridPane();
