@@ -12,27 +12,22 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class TeacherService {
-    public static void addTeachers(List<Teacher> teachers) throws IOException{
-        ObjectMapper mapper = new ObjectMapper();
-        String userDir = System.getProperty("user.home");
-        Path teachersFilePath = Paths.get(userDir, "teachers.json");
+    private static final ObjectMapper mapper = new ObjectMapper();
+    private static final String userDir = System.getProperty("user.home");
+    private static final Path teachersFilePath = Paths.get(userDir, "teachers.json");
 
-        List<Teacher> existingTeachers = new ArrayList<>();
-        if (Files.exists(teachersFilePath)){
-            existingTeachers = mapper.readValue(teachersFilePath.toFile(),
-                    new TypeReference<List<Teacher>>() {});
-        }
+    public static void addTeachers(List<Teacher> teachers) throws IOException {
 
-        for (Teacher teacher : teachers){
+        List<Teacher> existingTeachers = mapper.readValue(teachersFilePath.toFile(),
+                new TypeReference<>() {
+                });
+
+        for (Teacher teacher : teachers) {
             UUID id = UUID.randomUUID();
             teacher.setId(String.valueOf(id));
             existingTeachers.add(teacher);
@@ -42,64 +37,45 @@ public class TeacherService {
     }
 
     public List<Teacher> showTeachers() throws IOException{
-        ObjectMapper mapper = new ObjectMapper();
-        String userDir = System.getProperty("user.home");
-        Path teachersFilePath = Paths.get(userDir, "teachers.json");
         File file = new File(teachersFilePath.toUri());
 
-        if (!Files.exists(teachersFilePath)){
-            file.createNewFile();
-            return new ArrayList<>();
-        } else {
-            return mapper.readValue(file, new TypeReference<List<Teacher>>() {});
-        }
+        return mapper.readValue(file, new TypeReference<>() {
+        });
     }
 
     public static void deleteTeacher(Teacher teacher) throws IOException{
-        ObjectMapper mapper = new ObjectMapper();
-        String userDir = System.getProperty("user.home");
-        Path teachersFilePath = Paths.get(userDir, "teachers.json");
-
-        List<Teacher> teachers = new ArrayList<>();
-        if (Files.exists(teachersFilePath)){
-            teachers = mapper.readValue(teachersFilePath.toFile(),
-                    new TypeReference<List<Teacher>>() {});
-        }
+        List<Teacher> teachers = mapper.readValue(teachersFilePath.toFile(),
+                new TypeReference<>() {
+                });
 
         teachers.remove(teacher);
         mapper.writeValue(teachersFilePath.toFile(), teachers);
     }
 
     public void saveTeacherAfterUpdate(Teacher teacher) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        String userDir = System.getProperty("user.home");
-        Path teachersFilePath = Paths.get(userDir, "teachers.json");
         File file = new File(teachersFilePath.toUri());
 
-        List<Teacher> teachers = mapper.readValue(file, new TypeReference<List<Teacher>>(){});
+        List<Teacher> teachers = mapper.readValue(file, new TypeReference<>() {
+        });
 
-        int index = -1;
-        for (int i = 0; i < teachers.size(); i++) {
-            if (teachers.get(i).getId().equals(teacher.getId())) {
-                index = i;
+        for (Teacher t : teachers) {
+            if (Objects.equals(t.getId(), teacher.getId())) {
+                t.setFirstName(teacher.getFirstName());
+                t.setLastName(teacher.getLastName());
+                t.setMiddleName(teacher.getMiddleName());
+                t.setPosition(teacher.getPosition());
+                t.setAcademicDegree(teacher.getAcademicDegree());
+
                 break;
             }
-        }
-
-        if (index >= 0) {
-            teachers.set(index, teacher);
         }
 
         mapper.writeValue(file, teachers);
     }
 
     public List<Teacher> getAllTeachers() throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        String userDir = System.getProperty("user.home");
-        Path teachersFilePath = Paths.get(userDir, "teachers.json");
         File file = new File(teachersFilePath.toUri());
-        List<Teacher> teachers = Arrays.asList(mapper.readValue(file, Teacher[].class));
-        return teachers;
+        return Arrays.asList(mapper.readValue(file, Teacher[].class));
     }
 
     public void showAcademicTeachers() {
