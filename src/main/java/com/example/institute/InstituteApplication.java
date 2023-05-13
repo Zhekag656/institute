@@ -10,90 +10,70 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class InstituteApplication extends Application {
-    StudentController studentController = new StudentController();
-    TeacherController teacherController = new TeacherController();
+    private final StudentController studentController = new StudentController();
+    private final TeacherController teacherController = new TeacherController();
 
-    TeacherService teacherDao = new TeacherService();
+    private final TeacherService teacherService = new TeacherService();
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        try {
-            String homePath = System.getProperty("user.home");
+        String homePath = System.getProperty("user.home");
+        String studentsFilePath = homePath + File.separator + "students.json";
+        String teachersFilePath = homePath + File.separator + "teachers.json";
 
-            File studentsFile = new File(homePath + File.separator + "students.json");
-            if (!studentsFile.exists()) {
-                studentsFile.createNewFile();
-                FileWriter fileWriter = new FileWriter(studentsFile);
-                fileWriter.write("[]");
-                fileWriter.close();
-            }
-
-            File teachersFile = new File(homePath + File.separator + "teachers.json");
-            if (!teachersFile.exists()) {
-                teachersFile.createNewFile();
-                FileWriter fileWriter = new FileWriter(teachersFile);
-                fileWriter.write("[]");
-                fileWriter.close();
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (!Files.exists(Path.of(studentsFilePath))) {
+            createEmptyJsonFile(studentsFilePath);
         }
 
+        if (!Files.exists(Path.of(teachersFilePath))) {
+            createEmptyJsonFile(teachersFilePath);
+        }
         primaryStage.setTitle("Інформаційна система");
 
         GridPane gridPane = new GridPane();
         gridPane.setAlignment(Pos.CENTER);
 
+        Button addStudentsButton = new Button("Додати студента");
+        Button studentListButton = new Button("Список студентів");
+        Button addTeacherButton = new Button("Додати викладача");
+        Button teacherListButton = new Button("Список викладачів");
+        Button showProfessorsButton = new Button("Показати доцентів та професорів");
 
+        addStudentsButton.setStyle("-fx-background-color: #FFFFFF; -fx-font-size: 14pt; -fx-text-fill: #000000; -fx-pref-width: 400px; -fx-pref-height: 30px;");
+        studentListButton.setStyle("-fx-background-color: #FFFFFF; -fx-font-size: 14pt; -fx-text-fill: #000000; -fx-pref-width: 400px; -fx-pref-height: 30px;");
+        addTeacherButton.setStyle("-fx-background-color: #FFFFFF; -fx-font-size: 14pt; -fx-text-fill: #000000; -fx-pref-width: 400px; -fx-pref-height: 30px;");
+        teacherListButton.setStyle("-fx-background-color: #FFFFFF; -fx-font-size: 14pt; -fx-text-fill: #000000; -fx-pref-width: 400px; -fx-pref-height: 30px;");
+        showProfessorsButton.setStyle("-fx-background-color: #FFFFFF; -fx-font-size: 14pt; -fx-text-fill: #000000; -fx-pref-width: 400px; -fx-pref-height: 30px;");
 
-        Button button1 = new Button("Додати студента");
-        Button button2 = new Button("Список студентів");
-        Button button3 = new Button("Додати викладача");
-        Button button4 = new Button("Список викладачів");
-        Button button5 = new Button("Показати доцентів та професорів");
-
-        button1.setStyle("-fx-background-color: #FFFFFF; -fx-font-size: 14pt; -fx-text-fill: #000000; -fx-pref-width: 400px; -fx-pref-height: 30px;");
-        button2.setStyle("-fx-background-color: #FFFFFF; -fx-font-size: 14pt; -fx-text-fill: #000000; -fx-pref-width: 400px; -fx-pref-height: 30px;");
-        button3.setStyle("-fx-background-color: #FFFFFF; -fx-font-size: 14pt; -fx-text-fill: #000000; -fx-pref-width: 400px; -fx-pref-height: 30px;");
-        button4.setStyle("-fx-background-color: #FFFFFF; -fx-font-size: 14pt; -fx-text-fill: #000000; -fx-pref-width: 400px; -fx-pref-height: 30px;");
-        button5.setStyle("-fx-background-color: #FFFFFF; -fx-font-size: 14pt; -fx-text-fill: #000000; -fx-pref-width: 400px; -fx-pref-height: 30px;");
-
-
-        button1.setOnAction(e -> {
+        addStudentsButton.setOnAction(e -> {
             studentController.addStudentsWindow();
         });
-        button2.setOnAction(e -> {
-            try {
-                studentController.outputStudents();
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
+
+        studentListButton.setOnAction(e -> {
+            studentController.outputStudents();
         });
 
-        button3.setOnAction(e -> {
+        addTeacherButton.setOnAction(e -> {
             teacherController.addTeachersWindow();
         });
 
-        button4.setOnAction(e -> {
+        teacherListButton.setOnAction(e -> {
             teacherController.outputTeachers();
         });
 
-        button5.setOnAction(e -> {
-            try {
-                teacherDao.showAcademicTeachers();
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
+        showProfessorsButton.setOnAction(e -> {
+            teacherService.showAcademicTeachers();
         });
 
-        gridPane.add(button1, 0, 0);
-        gridPane.add(button2, 0, 1);
-        gridPane.add(button3, 0, 2);
-        gridPane.add(button4, 0, 3);
-        gridPane.add(button5, 0, 4);
+        gridPane.add(addStudentsButton, 0, 0);
+        gridPane.add(studentListButton, 0, 1);
+        gridPane.add(addTeacherButton, 0, 2);
+        gridPane.add(teacherListButton, 0, 3);
+        gridPane.add(showProfessorsButton, 0, 4);
 
         gridPane.setHgap(10);
         gridPane.setVgap(10);
@@ -103,5 +83,11 @@ public class InstituteApplication extends Application {
 
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+
+    public void createEmptyJsonFile(String filePath) throws IOException {
+        try (FileWriter fileWriter = new FileWriter(filePath)) {
+            fileWriter.write("[]");
+        }
     }
 }

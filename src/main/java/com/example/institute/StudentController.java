@@ -27,11 +27,10 @@ import java.util.UUID;
 public class StudentController {
     List<Student> students = new ArrayList<>();
     StudentService studentDao = new StudentService();
-    public void outputStudents() throws IOException {
+
+    public void outputStudents() {
         Stage stage = new Stage();
         stage.setTitle("Список студентів");
-
-
 
         TableView<Student> studentsTable = new TableView<>();
         studentsTable.setEditable(true);
@@ -188,8 +187,12 @@ public class StudentController {
 
         List<Student> existingStudents = new ArrayList<>();
         if (Files.exists(studentsFilePath)){
-            existingStudents = mapper.readValue(studentsFilePath.toFile(),
-                    new TypeReference<List<Student>>(){});
+            try {
+                existingStudents = mapper.readValue(studentsFilePath.toFile(),
+                        new TypeReference<List<Student>>(){});
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         ObservableList<Student> studentObservableList = FXCollections.observableList(existingStudents);
 

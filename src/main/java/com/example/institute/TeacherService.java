@@ -102,7 +102,7 @@ public class TeacherService {
         return teachers;
     }
 
-    public void showAcademicTeachers() throws IOException {
+    public void showAcademicTeachers() {
         TableView<Teacher> academicTable = new TableView<>();
         TableColumn<Teacher, String> lastNameCol = new TableColumn<>("Прізвище");
         lastNameCol.setCellValueFactory(new PropertyValueFactory<>("lastName"));
@@ -118,7 +118,12 @@ public class TeacherService {
         academicTable.getColumns().addAll(lastNameCol, firstNameCol, middleNameCol, degreeCol, positionCol);
 
 
-        List<Teacher> teachers = getAllTeachers();
+        List<Teacher> teachers = new ArrayList<>();
+        try {
+            teachers = getAllTeachers();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         ObservableList<Teacher> academicTeachers = FXCollections.observableArrayList();
         for (Teacher teacher : teachers) {
             String position = teacher.getPosition();
