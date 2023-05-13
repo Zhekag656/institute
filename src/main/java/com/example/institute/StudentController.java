@@ -110,7 +110,7 @@ public class StudentController {
         TableColumn<Student, String> yearOfGraduationCol = new TableColumn<>("Рік закінчення");
         yearOfGraduationCol.setCellValueFactory(new PropertyValueFactory<>("yearOfGraduation"));
         yearOfGraduationCol.setCellFactory(TextFieldTableCell.forTableColumn());
-        yearOfEntryCol.setOnEditCommit(event -> {
+        yearOfGraduationCol.setOnEditCommit(event -> {
             Student student = event.getRowValue();
             student.setYearOfGraduation(event.getNewValue());
             try {
