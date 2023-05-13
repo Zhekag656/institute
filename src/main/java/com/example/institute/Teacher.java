@@ -52,7 +52,7 @@ public class Teacher extends Person{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Teacher teacher = (Teacher) o;
-        return Objects.equals(academicDegree, teacher.academicDegree) && Objects.equals(position, teacher.position);
+        return Objects.equals(getId(), teacher.getId());
     }
 
     @Override

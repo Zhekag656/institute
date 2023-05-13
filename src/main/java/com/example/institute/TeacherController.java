@@ -19,10 +19,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class TeacherController {
+    private final List<Teacher> teachers = new ArrayList<>();
 
-    List<Teacher> teachers = new ArrayList<>();
-
-    TeacherDao teacherDao = new TeacherDao();
+    private final TeacherService teacherService = new TeacherService();
 
     public void addTeachersWindow() {
         Stage stage = new Stage();
@@ -80,7 +79,7 @@ public class TeacherController {
                         degreeComboBox.getValue(),
                         positionComboBox.getValue());
                 teachers.add(newTeacher);
-                TeacherDao.addTeachers(teachers);
+                TeacherService.addTeachers(teachers);
                 stage.close();
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
@@ -101,7 +100,6 @@ public class TeacherController {
         TableView<Teacher> teachersTable = new TableView<>();
         teachersTable.setEditable(true);
 
-
         TableColumn<Teacher, String> lastNameCol = new TableColumn<>("Прізвище");
         lastNameCol.setCellValueFactory(new PropertyValueFactory<>("lastName"));
         lastNameCol.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -109,7 +107,7 @@ public class TeacherController {
             Teacher teacher = event.getRowValue();
             teacher.setLastName(event.getNewValue());
             try {
-                teacherDao.saveTeacherAfterUpdate(teacher);
+                teacherService.saveTeacherAfterUpdate(teacher);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -123,7 +121,7 @@ public class TeacherController {
             Teacher teacher = event.getRowValue();
             teacher.setFirstName(event.getNewValue());
             try {
-                teacherDao.saveTeacherAfterUpdate(teacher);
+                teacherService.saveTeacherAfterUpdate(teacher);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -136,7 +134,7 @@ public class TeacherController {
             Teacher teacher = event.getRowValue();
             teacher.setMiddleName(event.getNewValue());
             try {
-                teacherDao.saveTeacherAfterUpdate(teacher);
+                teacherService.saveTeacherAfterUpdate(teacher);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -151,7 +149,7 @@ public class TeacherController {
             Teacher teacher = event.getRowValue();
             teacher.setAcademicDegree(String.valueOf(event.getNewValue()));
             try {
-                teacherDao.saveTeacherAfterUpdate(teacher);
+                teacherService.saveTeacherAfterUpdate(teacher);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -167,7 +165,7 @@ public class TeacherController {
             Teacher teacher = event.getRowValue();
             teacher.setPosition(event.getNewValue());
             try {
-                teacherDao.saveTeacherAfterUpdate(teacher);
+                teacherService.saveTeacherAfterUpdate(teacher);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -195,7 +193,7 @@ public class TeacherController {
                             Optional<ButtonType> result = alert.showAndWait();
                             if (result.isPresent() && result.get() == ButtonType.OK){
                                 teachers.remove(selectedTeacher);
-                                TeacherDao.deleteTeacher(selectedTeacher);
+                                TeacherService.deleteTeacher(selectedTeacher);
                                 stage.close();
                             }
                         } catch (IOException e){
@@ -221,7 +219,7 @@ public class TeacherController {
 
         List<Teacher> teachers = null;
         try {
-            teachers = teacherDao.showTeachers();
+            teachers = teacherService.showTeachers();
         } catch (IOException e){
             e.printStackTrace();
         }

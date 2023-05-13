@@ -10,7 +10,7 @@ import java.util.UUID;
 public class Student extends Person{
     @SerializedName("birthday")
     private String dateOfBirth;
-    @SerializedName("admission_name")
+    @SerializedName("admission_year")
     private String yearOfAdmission;
     @SerializedName("graduation_year")
     private String yearOfGraduation;
@@ -58,11 +58,7 @@ public class Student extends Person{
 
     @Override
     public String toString() {
-        return "Student{" +
-                "dateOfBirth='" + dateOfBirth + '\'' +
-                ", yearOfAdmission=" + yearOfAdmission +
-                ", yearOfGraduation=" + yearOfGraduation +
-                '}';
+        return super.toString();
     }
 
     @Override
@@ -70,7 +66,7 @@ public class Student extends Person{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Student student = (Student) o;
-        return Objects.equals(dateOfBirth, student.dateOfBirth) && Objects.equals(yearOfAdmission, student.yearOfAdmission) && Objects.equals(yearOfGraduation, student.yearOfGraduation);
+        return Objects.equals(getId(), student.getId());
     }
 
     @Override
