@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class StudentDao {
+public class StudentService {
     public static void addStudents(List<Student> students) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         String userDir = System.getProperty("user.home");

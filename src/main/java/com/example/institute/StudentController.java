@@ -26,7 +26,7 @@ import java.util.UUID;
 
 public class StudentController {
     List<Student> students = new ArrayList<>();
-    StudentDao studentDao = new StudentDao();
+    StudentService studentDao = new StudentService();
     public void outputStudents() throws IOException {
         Stage stage = new Stage();
         stage.setTitle("Список студентів");
@@ -142,7 +142,7 @@ public class StudentController {
                             Optional<ButtonType> result = alert.showAndWait();
                             if (result.isPresent() && result.get() == ButtonType.OK) {
                                 students.remove(selectedStudent);
-                                StudentDao.deleteStudent(selectedStudent);
+                                StudentService.deleteStudent(selectedStudent);
                                 stage.close();
                             }
                         }catch (IOException e){
@@ -281,7 +281,7 @@ public class StudentController {
                         yearOfAdmissionField.getText(),
                         yearOfGraduationField.getText());
                 students.add(newStudent);
-                StudentDao.addStudents(students);
+                StudentService.addStudents(students);
                 stage.close();
             } catch (IOException ex) {
                 throw new RuntimeException(ex);

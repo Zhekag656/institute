@@ -20,7 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-public class TeacherDao {
+public class TeacherService {
     public static void addTeachers(List<Teacher> teachers) throws IOException{
         ObjectMapper mapper = new ObjectMapper();
         String userDir = System.getProperty("user.home");

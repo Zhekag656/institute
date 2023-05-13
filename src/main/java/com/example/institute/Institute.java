@@ -10,13 +10,12 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
 
 public class Institute extends Application {
     StudentController studentController = new StudentController();
     TeacherController teacherController = new TeacherController();
 
-    TeacherDao teacherDao = new TeacherDao();
+    TeacherService teacherDao = new TeacherService();
 
     @Override
     public void start(Stage primaryStage) throws IOException {

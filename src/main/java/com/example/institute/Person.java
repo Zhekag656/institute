@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.UUID;
 
 public class Person {
+
     @SerializedName("id")
     private UUID id;
     @SerializedName("last_name")
@@ -26,11 +27,7 @@ public class Person {
 
     @Override
     public String toString() {
-        return "Person{" +
-                "surname='" + lastName + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", middleName='" + middleName + '\'' +
-                '}';
+        return String.format("%s %s %s", lastName, firstName, middleName);
     }
 
     @JsonProperty("last_name")

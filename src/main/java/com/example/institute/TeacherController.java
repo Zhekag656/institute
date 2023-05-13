@@ -22,7 +22,7 @@ public class TeacherController {
 
     List<Teacher> teachers = new ArrayList<>();
 
-    TeacherDao teacherDao = new TeacherDao();
+    TeacherService teacherDao = new TeacherService();
 
     public void addTeachersWindow() {
         Stage stage = new Stage();
@@ -80,7 +80,7 @@ public class TeacherController {
                         degreeComboBox.getValue(),
                         positionComboBox.getValue());
                 teachers.add(newTeacher);
-                TeacherDao.addTeachers(teachers);
+                TeacherService.addTeachers(teachers);
                 stage.close();
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
@@ -195,7 +195,7 @@ public class TeacherController {
                             Optional<ButtonType> result = alert.showAndWait();
                             if (result.isPresent() && result.get() == ButtonType.OK){
                                 teachers.remove(selectedTeacher);
-                                TeacherDao.deleteTeacher(selectedTeacher);
+                                TeacherService.deleteTeacher(selectedTeacher);
                                 stage.close();
                             }
                         } catch (IOException e){
