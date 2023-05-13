@@ -11,7 +11,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class Institute extends Application {
+public class InstituteApplication extends Application {
     StudentController studentController = new StudentController();
     TeacherController teacherController = new TeacherController();
 
