@@ -20,18 +20,13 @@ public class InstituteApplication extends Application {
     private final TeacherService teacherService = new TeacherService();
 
     @Override
-    public void start(Stage primaryStage) throws IOException {
-        String homePath = System.getProperty("user.home");
-        String studentsFilePath = homePath + File.separator + "students.json";
-        String teachersFilePath = homePath + File.separator + "teachers.json";
+    public void start(Stage primaryStage) {
+        checkFilesAreExist();
+        fillPrimaryStage(primaryStage);
+        primaryStage.show();
+    }
 
-        if (!Files.exists(Path.of(studentsFilePath))) {
-            createEmptyJsonFile(studentsFilePath);
-        }
-
-        if (!Files.exists(Path.of(teachersFilePath))) {
-            createEmptyJsonFile(teachersFilePath);
-        }
+    private void fillPrimaryStage(Stage primaryStage) {
         primaryStage.setTitle("Інформаційна система");
 
         GridPane gridPane = new GridPane();
@@ -49,25 +44,15 @@ public class InstituteApplication extends Application {
         teacherListButton.setStyle("-fx-background-color: #FFFFFF; -fx-font-size: 14pt; -fx-text-fill: #000000; -fx-pref-width: 400px; -fx-pref-height: 30px;");
         showProfessorsButton.setStyle("-fx-background-color: #FFFFFF; -fx-font-size: 14pt; -fx-text-fill: #000000; -fx-pref-width: 400px; -fx-pref-height: 30px;");
 
-        addStudentsButton.setOnAction(e -> {
-            studentController.addStudentsWindow();
-        });
+        addStudentsButton.setOnAction(e -> studentController.addStudentsWindow());
 
-        studentListButton.setOnAction(e -> {
-            studentController.outputStudents();
-        });
+        studentListButton.setOnAction(e -> studentController.outputStudents());
 
-        addTeacherButton.setOnAction(e -> {
-            teacherController.addTeachersWindow();
-        });
+        addTeacherButton.setOnAction(e -> teacherController.addTeachersWindow());
 
-        teacherListButton.setOnAction(e -> {
-            teacherController.outputTeachers();
-        });
+        teacherListButton.setOnAction(e -> teacherController.outputTeachers());
 
-        showProfessorsButton.setOnAction(e -> {
-            teacherService.showAcademicTeachers();
-        });
+        showProfessorsButton.setOnAction(e -> teacherService.showAcademicTeachers());
 
         gridPane.add(addStudentsButton, 0, 0);
         gridPane.add(studentListButton, 0, 1);
@@ -82,12 +67,26 @@ public class InstituteApplication extends Application {
         Scene scene = new Scene(gridPane, 900, 800);
 
         primaryStage.setScene(scene);
-        primaryStage.show();
     }
 
-    public void createEmptyJsonFile(String filePath) throws IOException {
+    private void checkFilesAreExist() {
+        String homePath = System.getProperty("user.home");
+        String studentsFilePath = homePath + File.separator + "students.json";
+        String teachersFilePath = homePath + File.separator + "teachers.json";
+
+        if (!Files.exists(Path.of(teachersFilePath))) {
+            createEmptyJsonFile(studentsFilePath);
+        }
+        if (!Files.exists(Path.of(teachersFilePath))) {
+            createEmptyJsonFile(teachersFilePath);
+        }
+    }
+
+    private void createEmptyJsonFile(String filePath) {
         try (FileWriter fileWriter = new FileWriter(filePath)) {
             fileWriter.write("[]");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
