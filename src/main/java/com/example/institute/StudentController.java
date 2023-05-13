@@ -16,7 +16,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -25,8 +24,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class StudentController {
-    List<Student> students = new ArrayList<>();
-    StudentService studentDao = new StudentService();
+    private final List<Student> students = new ArrayList<>();
+    private final StudentService studentService = new StudentService();
 
     public void outputStudents() {
         Stage stage = new Stage();
@@ -35,20 +34,19 @@ public class StudentController {
         TableView<Student> studentsTable = new TableView<>();
         studentsTable.setEditable(true);
 
-
         TableColumn<Student, String> lastNameCol = new TableColumn<>("Прізвище");
         lastNameCol.setCellValueFactory(new PropertyValueFactory<>("lastName"));
         lastNameCol.setCellFactory(TextFieldTableCell.forTableColumn());
-        lastNameCol.setOnEditCommit(event -> {
+
+        lastNameCol.setOnEditCommit((event) -> {
             Student student = event.getRowValue();
             student.setLastName(event.getNewValue());
             try {
-                studentDao.saveStudentAfterUpdate(student);
+                studentService.updateStudent(student);
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
             }
         });
-
 
         TableColumn<Student, String> firstNameCol = new TableColumn<>("Ім'я");
         firstNameCol.setCellValueFactory(new PropertyValueFactory<>("firstName"));
@@ -57,12 +55,11 @@ public class StudentController {
             Student student = event.getRowValue();
             student.setFirstName(event.getNewValue());
             try {
-                studentDao.saveStudentAfterUpdate(student);
+                studentService.updateStudent(student);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         });
-
 
         TableColumn<Student, String> middleNameCol = new TableColumn<>("По-батькові");
         middleNameCol.setCellValueFactory(new PropertyValueFactory<>("middleName"));
@@ -71,12 +68,11 @@ public class StudentController {
             Student student = event.getRowValue();
             student.setMiddleName(event.getNewValue());
             try {
-                studentDao.saveStudentAfterUpdate(student);
+                studentService.updateStudent(student);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         });
-
 
         TableColumn<Student, String> birthDateCol = new TableColumn<>("Дата народження");
         birthDateCol.setCellValueFactory(new PropertyValueFactory<>("dateOfBirth"));
@@ -85,12 +81,11 @@ public class StudentController {
             Student student = event.getRowValue();
             student.setDateOfBirth(event.getNewValue());
             try {
-                studentDao.saveStudentAfterUpdate(student);
+                studentService.updateStudent(student);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         });
-
 
         TableColumn<Student, String> yearOfEntryCol = new TableColumn<>("Рік вступу");
         yearOfEntryCol.setCellValueFactory(new PropertyValueFactory<>("yearOfAdmission"));
@@ -99,12 +94,11 @@ public class StudentController {
             Student student = event.getRowValue();
             student.setYearOfAdmission(event.getNewValue());
             try {
-                studentDao.saveStudentAfterUpdate(student);
+                studentService.updateStudent(student);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         });
-
 
         TableColumn<Student, String> yearOfGraduationCol = new TableColumn<>("Рік закінчення");
         yearOfGraduationCol.setCellValueFactory(new PropertyValueFactory<>("yearOfGraduation"));
@@ -113,7 +107,7 @@ public class StudentController {
             Student student = event.getRowValue();
             student.setYearOfGraduation(event.getNewValue());
             try {
-                studentDao.saveStudentAfterUpdate(student);
+                studentService.updateStudent(student);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -127,7 +121,6 @@ public class StudentController {
         actionsColumn.setCellFactory(col -> {
             TableCell<Student, Void> cell = new TableCell<>() {
                 private final Button deleteButton = new Button("Відрахувати");
-
                 {
                     deleteButton.setStyle("-fx-background-color: red; -fx-font-size: 10pt; -fx-text-fill: #000000; -fx-pref-width: 100px; -fx-pref-height: 20px;");
                     deleteButton.setOnAction(event -> {
@@ -166,7 +159,7 @@ public class StudentController {
 
         List<Student> students = null;
         try {
-            students = studentDao.showStudents();
+            students = studentService.showStudents();
         } catch (IOException e){
             e.printStackTrace();
         }
@@ -174,7 +167,6 @@ public class StudentController {
         if (students != null){
             studentsTable.getItems().addAll(students);
         }
-
 
         TextField searchField = new TextField();
         searchField.setPromptText("Введіть прізвище студента");
@@ -186,32 +178,26 @@ public class StudentController {
         Path studentsFilePath = Paths.get(userDir, "students.json");
 
         List<Student> existingStudents = new ArrayList<>();
-        if (Files.exists(studentsFilePath)){
-            try {
-                existingStudents = mapper.readValue(studentsFilePath.toFile(),
-                        new TypeReference<List<Student>>(){});
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        try {
+            existingStudents = mapper.readValue(studentsFilePath.toFile(),
+                    new TypeReference<>() {
+                    });
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         ObservableList<Student> studentObservableList = FXCollections.observableList(existingStudents);
 
         FilteredList<Student> filteredData = new FilteredList<>(studentObservableList, p -> true);
-        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
-            filteredData.setPredicate(student -> {
-                if (newValue == null || newValue.isEmpty()){
-                    return true;
-                }
+        searchField.textProperty().addListener((observable, oldValue, newValue) ->
+                filteredData.setPredicate(student -> {
+                    if (newValue == null || newValue.isEmpty()) {
+                        return true;
+                    }
 
-                String lowerCaseFilter = newValue.toLowerCase();
+                    String lowerCaseFilter = newValue.toLowerCase();
 
-                if (student.getLastName().toLowerCase().contains(lowerCaseFilter)){
-                    return true;
-                }
-
-                return false;
-            });
-        });
+                    return student.toString().toLowerCase().contains(lowerCaseFilter);
+                }));
 
         SortedList<Student> sortedData = new SortedList<>(filteredData);
 
@@ -282,7 +268,8 @@ public class StudentController {
                         studentsMiddleNameField.getText(),
                         dateOfBirthField.getText(),
                         yearOfAdmissionField.getText(),
-                        yearOfGraduationField.getText());
+                        yearOfGraduationField.getText()
+                );
                 students.add(newStudent);
                 StudentService.addStudents(students);
                 stage.close();

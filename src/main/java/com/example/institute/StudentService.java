@@ -5,24 +5,21 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 public class StudentService {
-    public static void addStudents(List<Student> students) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        String userDir = System.getProperty("user.home");
-        Path studentsFilePath = Paths.get(userDir, "students.json");
+    private final static String userDir = System.getProperty("user.home");
+    private final static Path studentsFilePath = Paths.get(userDir, "students.json");
+    private final static ObjectMapper mapper = new ObjectMapper();
 
-        List<Student> existingStudents = new ArrayList<>();
-        if (Files.exists(studentsFilePath)){
-            existingStudents = mapper.readValue(studentsFilePath.toFile(),
-                    new TypeReference<List<Student>>(){});
-        }
+    public static void addStudents(List<Student> students) throws IOException {
+        List<Student> existingStudents = mapper.readValue(studentsFilePath.toFile(), new TypeReference<>() {
+        });
 
         for (Student student : students) {
             UUID id = UUID.randomUUID();
@@ -30,59 +27,48 @@ public class StudentService {
             existingStudents.add(student);
         }
 
-
         mapper.writeValue(studentsFilePath.toFile(), existingStudents);
     }
 
-    public List<Student> showStudents() throws IOException{
-        ObjectMapper mapper = new ObjectMapper();
-        String userDir = System.getProperty("user.home");
-        Path studentsFilePath = Paths.get(userDir, "students.json");
+    public List<Student> showStudents() throws IOException {
         File file = new File(studentsFilePath.toUri());
 
-        if (!Files.exists(studentsFilePath)){
-            file.createNewFile();
-            return new ArrayList<>();
-        } else {
-            return mapper.readValue(file, new TypeReference<List<Student>>() {});
-        }
+        return mapper.readValue(file, new TypeReference<>() {
+        });
     }
 
-    public static void deleteStudent(Student student) throws IOException{
-        ObjectMapper mapper = new ObjectMapper();
-        String userDir = System.getProperty("user.home");
-        Path studentsFilePath = Paths.get(userDir, "students.json");
-
-        List<Student> students = new ArrayList<>();
-        if (Files.exists(studentsFilePath)){
-            students = mapper.readValue(studentsFilePath.toFile(),
-                    new TypeReference<List<Student>>() {});
-        }
+    public static void deleteStudent(Student student) throws IOException {
+        List<Student> students = mapper.readValue(studentsFilePath.toFile(), new TypeReference<>() {
+        });
 
         students.remove(student);
         mapper.writeValue(studentsFilePath.toFile(), students);
     }
 
-    public void saveStudentAfterUpdate(Student student) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        String userDir = System.getProperty("user.home");
-        Path teachersFilePath = Paths.get(userDir, "students.json");
-        File file = new File(teachersFilePath.toUri());
+    public void updateStudent(Student student) throws IOException {
+        File file = new File(studentsFilePath.toUri());
 
-        List<Student> students = mapper.readValue(file, new TypeReference<List<Student>>(){});
+        List<Student> students = mapper.readValue(file, new TypeReference<>() {
+        });
 
-        int index = -1;
-        for (int i = 0; i < students.size(); i++) {
-            if (students.get(i).getId().equals(student.getId())) {
-                index = i;
+        for (Student s : students) {
+            if (Objects.equals(s.getId(), student.getId())) {
+                s.setFirstName(student.getFirstName());
+                s.setLastName(student.getLastName());
+                s.setMiddleName(student.getMiddleName());
+                s.setDateOfBirth(student.getDateOfBirth());
+                s.setYearOfAdmission(student.getYearOfAdmission());
+                s.setYearOfGraduation(student.getYearOfGraduation());
+
                 break;
             }
         }
 
-        if (index >= 0) {
-            students.set(index, student);
-        }
+        saveStudents(students);
+    }
 
+    public void saveStudents(List<Student> students) throws IOException {
+        File file = new File(studentsFilePath.toUri());
         mapper.writeValue(file, students);
     }
 }
